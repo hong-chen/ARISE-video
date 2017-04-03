@@ -161,6 +161,13 @@ class PLT_TRK_MAP:
             height0 = 850000.0
             meridians = np.arange(-180, 181, 4)
             parallels = np.arange(-90, 91, 2)
+        elif init.date_s == '2014-09-24':
+            lon0 = -134.0
+            lat0 = 71.0
+            width0  = 850000.0
+            height0 = 850000.0
+            meridians = np.arange(-180, 181, 4)
+            parallels = np.arange(-90, 91, 2)
 
         #++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         self.time_trk, self.lon_trk, self.lat_trk, alt_trk = GDATA_TRK(init.fname_trk)
@@ -322,14 +329,15 @@ if __name__ == '__main__':
     from matplotlib.ticker import FixedLocator
     from mpl_toolkits.axes_grid.inset_locator import inset_axes
     from pre_vid import ANIM_INIT
-    #  date = datetime.datetime(2014, 9, 4)  # use old one
+    #  date = datetime.datetime(2014, 9, 4)  # done
     #  date = datetime.datetime(2014, 9, 7)  # done
     #  date = datetime.datetime(2014, 9, 9)  # done
     #  date = datetime.datetime(2014, 9, 10)  # doing
     #  date = datetime.datetime(2014, 9, 16) # done
     #  date = datetime.datetime(2014, 9, 17) # done
     #  date = datetime.datetime(2014, 9, 19) # done
-    date = datetime.datetime(2014, 9, 21) # doing
+    #  date = datetime.datetime(2014, 9, 21) # doing
+    date = datetime.datetime(2014, 9, 24) # doing
 
 
     init = ANIM_INIT(date)
@@ -341,7 +349,8 @@ if __name__ == '__main__':
     #  CDATA_MAP_H5(init.fname_map_tiff, init.fname_map)
     #  exit()
     #  plt  = PLT_TRK_MAP([init, 19.8333*3600.0, 23.99*3600.0], Nloc_inset=4, testMode=True)
-    #  plt  = PLT_TRK_MAP([init, 23.98*3600.0, 23.99*3600.0], Nloc_inset=4, testMode=True)
+    #  plt  = PLT_TRK_MAP([init, 21.2*3600.0, 21.99*3600.0], Nloc_inset=4, testMode=True)
+    #  plt  = PLT_TRK_MAP([init, 24.8*3600.0, 24.99*3600.0], Nloc_inset=4, testMode=True)
     #  exit()
     # =============================================
 
@@ -355,8 +364,10 @@ if __name__ == '__main__':
     #  time_sec_e = (22.99)*3600.0
     #  time_sec_s = (19.0+ 5.0/60.0)*3600.0
     #  time_sec_e = (23.0+55.0/60.0)*3600.0
-    time_sec_s = (18.0+30.0/60.0)*3600.0
-    time_sec_e = (23.0+10.0/60.0)*3600.0
+    #  time_sec_s = (18.0+30.0/60.0)*3600.0
+    #  time_sec_e = (23.0+10.0/60.0)*3600.0
+    time_sec_s = (21.0+10.0/60.0)*3600.0
+    time_sec_e = (24.0+50.0/60.0)*3600.0
 
-    MAIN_TRK_MAP(init, time_sec_s, time_sec_e, ncpu=12)
+    MAIN_TRK_MAP(init, time_sec_s, time_sec_e, ncpu=16)
     exit()
