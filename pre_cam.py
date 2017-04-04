@@ -23,9 +23,9 @@ def AVI2PNG(fname_avi, fdir_out_png, fps=2, verbose=False):
     N = len(glob.glob('%s/*png' % fdir_out_png))
 
     if N > 0:
-        print 'Message [AVI2PNG]: %s conversion [AVI->PNG] is complete.' % (fname_avi)
+        print('Message [AVI2PNG]: %s conversion [AVI->PNG] is complete.' % (fname_avi))
     else:
-        print 'Error [AVI2PNG]: %s cannot be converted.' % (fname_avi)
+        print('Error [AVI2PNG]: %s cannot be converted.' % (fname_avi))
 
 def GTIME_IMAGE(fname, cropRegion, upscaleN=20, iterN=4):
     img = Image.open(fname)
@@ -53,8 +53,6 @@ def RENAME_PNG(fdir_in, fdir_out, cropRegion, fps=2, dtime_ref=datetime.datetime
         fname     = fnames[i]
         rawString = GTIME_IMAGE(fname, cropRegion)
         newString = rawString.replace(' ', '')
-        if i <=20:
-            print(newString)
         try:
             dtime = datetime.datetime.strptime(newString, '%Y-%m-%d%H:%M:%S')
             jsec_ocr[i] = (dtime-dtime_ref).total_seconds()
