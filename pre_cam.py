@@ -40,21 +40,35 @@ def GTIME_IMAGE(fname, cropRegion, upscaleN=20, iterN=4):
     return string
 
 def RENAME_PNG(fdir_in, fdir_out, cropRegion, dtime_s, fps=2):
+
     fnames = sorted(glob.glob('%s/*.png' % fdir_in))
     NFile  = len(fnames)
 
-    jday_sec_ocr_tmp = np.zeros(NFile, dtype=np.float64)
+    jday_fps_ref = np.zeros(NFile, dtype=np.float64) # Julian Day calculated from FPS (frame per second)
+    jday_ocr_tmp = np.zeros(NFile, dtype=np.float64) # Julian Day from OCR by tesseract (tmp)
 
+    # first iteration to get time stamp from OCR
     for i in range(NFile):
-        fname = fnames[i]
+        jday_fps_ref[i] = ((dtime_s + datetime.timedelta(seconds=1.0/fps*i)) - datetime.datetime(1, 1, 1)).total_seconds() / 86400.0 + 1.0
+
+        fname     = fnames[i]
         rawString = GTIME_IMAGE(fname, cropRegion)
         newString = rawString.replace(' ', '')
         try:
             dtime = datetime.datetime.strptime(newString, '%Y-%m-%d%H:%M:%S')
-            jday_sec_ocr_tmp[i] = (dtime-datetime.datetime(1, 1, 1)).total_seconds() / 86400.0 + 1.0
+            jday_ocr_tmp[i] = (dtime-datetime.datetime(1, 1, 1)).total_seconds() / 86400.0 + 1.0
         except ValueError:
-            jday_sec_ocr_tmp[i] = np.nan
-        print(jday_sec_ocr_tmp[i])
+            jday_ocr_tmp[i] = np.nan
+
+    import h5py
+    f = h5py.File('test.h5', 'w')
+    f['jday_fps_ref'] = jday_fps_ref
+    f['jday_ocr_tmp'] = jday_ocr_tmp
+    f.close()
+
+    import matplotlib.pyplot as plt
+    plt.plot(np.arange(NFile), jday_ocr_tmp)
+    plt.show()
 
     exit()
 
@@ -116,10 +130,12 @@ def MAIN_CAM(init, dtime_s, dtime_e, fdir_cam_data='/argus/field/arise/video'):
 
     # use ffmpeg to convert AVI video to PNG image
     for fname in fnames_n:
+        dtime_str      = fname[-23:-4]
+        dtime          = datetime.datetime.strptime(dtime_str, '%Y-%m-%d-%H-%M-%S')
         filename       = fname.split('/')[-1][:-4]
         fdir_out_png   = '%s/%s' % (init.fdir_ncam_graph, filename)
-        cropRegion = (134, 1926, 258, 1944)
-        RENAME_PNG(fdir_out_png, init.fdir_ncam_graph, cropRegion)
+        cropRegion     = (134, 1926, 258, 1944)
+        RENAME_PNG(fdir_out_png, init.fdir_ncam_graph, cropRegion, dtime)
         #  AVI2PNG(fname, fdir_out_png)
     exit()
 
@@ -127,7 +143,6 @@ def MAIN_CAM(init, dtime_s, dtime_e, fdir_cam_data='/argus/field/arise/video'):
         filename   = fname.split('/')[-1][:-4]
         fdir_out   = '%s/%s' % (init.fdir_fcam_graph, filename)
         cropRegion = (151, 1064, 274, 1077)
-        print(fdir_out)
         #  AVI2PNG(fname, fdir_out)
 
     exit()
