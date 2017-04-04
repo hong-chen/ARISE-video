@@ -133,8 +133,6 @@ def MAIN_CAM(init, dtime_s, dtime_e, fdir_cam_data='/argus/field/arise/video'):
         AVI2PNG(fname, fdir_out_png)
         RENAME_PNG(fdir_out_png, init.fdir_fcam_graph, cropRegion, dtime_ref=dtime)
 
-    exit()
-
 def CAL_ZSCORE(X, c=7.5):
     """
     cite: Zou and Zeng 2006
@@ -155,14 +153,25 @@ if __name__ == '__main__':
     #  date = datetime.datetime(2014, 9, 4)
     #  date = datetime.datetime(2014, 9, 7)
     #  date = datetime.datetime(2014, 9, 9)
+
+    # --- 2014-09-10 ---
     #  date = datetime.datetime(2014, 9, 10)
+    #  dtime_s = datetime.datetime(2014, 9, 10, 19, 0)
+    #  dtime_e = datetime.datetime(2014, 9, 11,  0, 0)
+
     #  date = datetime.datetime(2014, 9, 16)
     #  date = datetime.datetime(2014, 9, 17)
     #  date = datetime.datetime(2014, 9, 19)
+
+    # --- 2014-09-21 ---
     #  date = datetime.datetime(2014, 9, 21)
+    #  dtime_s = datetime.datetime(2014, 9, 21, 18, 0)
+    #  dtime_e = datetime.datetime(2014, 9, 22,  0, 0)
+
+    # --- 2014-09-24 ---
     date = datetime.datetime(2014, 9, 24)
-    dtime_s = datetime.datetime(2014, 9, 24, 23, 40)
-    dtime_e = datetime.datetime(2014, 9, 25,  0, 10)
+    dtime_s = datetime.datetime(2014, 9, 24, 21, 0)
+    dtime_e = datetime.datetime(2014, 9, 25,  1, 0)
 
 
     init = ANIM_INIT(date)
