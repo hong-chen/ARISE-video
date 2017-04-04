@@ -4,6 +4,7 @@ import glob
 import datetime
 from PIL import Image
 from pytesseract import image_to_string
+from scipy import stats
 
 def AVI2PNG(fname_avi, fdir_out_png, fps=2, verbose=False):
 
@@ -39,76 +40,61 @@ def GTIME_IMAGE(fname, cropRegion, upscaleN=20, iterN=4):
     string = image_to_string(img, config='digits')
     return string
 
-def RENAME_PNG(fdir_in, fdir_out, cropRegion, dtime_s, fps=2):
+def RENAME_PNG(fdir_in, fdir_out, cropRegion, fps=2, dtime_ref=datetime.datetime(1, 1, 1), sec_threshold=1.5):
 
     fnames = sorted(glob.glob('%s/*.png' % fdir_in))
     NFile  = len(fnames)
 
-    jday_fps_ref = np.zeros(NFile, dtype=np.float64) # Julian Day calculated from FPS (frame per second)
-    jday_ocr_tmp = np.zeros(NFile, dtype=np.float64) # Julian Day from OCR by tesseract (tmp)
+    XX = np.arange(NFile)
 
+    jsec_ocr = np.zeros(NFile, dtype=np.float64) # Julian seconds from OCR by tesseract
     # first iteration to get time stamp from OCR
-    for i in range(NFile):
-        jday_fps_ref[i] = ((dtime_s + datetime.timedelta(seconds=1.0/fps*i)) - datetime.datetime(1, 1, 1)).total_seconds() / 86400.0 + 1.0
-
+    for i in XX:
         fname     = fnames[i]
         rawString = GTIME_IMAGE(fname, cropRegion)
         newString = rawString.replace(' ', '')
+        if i <=20:
+            print(newString)
         try:
             dtime = datetime.datetime.strptime(newString, '%Y-%m-%d%H:%M:%S')
-            jday_ocr_tmp[i] = (dtime-datetime.datetime(1, 1, 1)).total_seconds() / 86400.0 + 1.0
+            jsec_ocr[i] = (dtime-dtime_ref).total_seconds()
         except ValueError:
-            jday_ocr_tmp[i] = np.nan
+            jsec_ocr[i] = np.nan
 
-    import h5py
-    f = h5py.File('test.h5', 'w')
-    f['jday_fps_ref'] = jday_fps_ref
-    f['jday_ocr_tmp'] = jday_ocr_tmp
-    f.close()
+    jsec_ref  = 1.0/fps*XX
 
-    import matplotlib.pyplot as plt
-    plt.plot(np.arange(NFile), jday_ocr_tmp)
-    plt.show()
+    logic_nan = np.isnan(jsec_ocr)
+    indices_nan_yes = np.where(logic_nan)[0]
+    indices_nan_not = np.where(np.logical_not(logic_nan))[0]
 
-    exit()
+    # find outliers in jsec_ocr[indices_nan_not]
+    diff_raw  = jsec_ocr[indices_nan_not]-jsec_ref[indices_nan_not]
+    diff_int  = np.int_(diff_raw)
+    diff_int_unique, indices = np.unique(diff_int, return_inverse=True)
+    counts    = np.bincount(indices)
+    index_max = np.argmax(counts)
+    diff0     = diff_int_unique[index_max]
+    diff      = diff_raw - diff0
+    indices_outlier = indices_nan_not[np.where(np.abs(diff)>sec_threshold)[0]]
+    jsec_ocr[indices_outlier] = np.nan
 
-    fnames_new = []
-    for fname in fnames:
-        rawString = GTIME_IMAGE(fname, cropRegion)
-        newString = rawString.replace(' ', '')
+    logic_nan = np.isnan(jsec_ocr)
+    indices_nan_yes = np.where(logic_nan)[0]
+    indices_nan_not = np.where(np.logical_not(logic_nan))[0]
 
-        time_s = newString
-        try:
-            dtime = datetime.datetime.strptime('%s %s' % (date_s, time_s), '%Y-%m-%d %H:%M:%S')
-            fname_new = '%s/%7.7d_%s_%s_fine.png' % (fdir_out, startN, date_s, newString)
-            # re-check good
-            if len(fnames_new)>=1 and ('bad' not in fnames_new[-1]):
-                time_s0 = fnames_new[-1].split('_')[-2]
-                dtime0  = datetime.datetime.strptime('%s %s' % (date_s, time_s0), '%Y-%m-%d %H:%M:%S')
-                if (dtime-dtime0).total_seconds() in [0, 1]:
-                    fname_new = '%s/%7.7d_%s_%s_good.png' % (fdir_out, startN, date_s, newString)
+    slope, intercept, r_value, p_value, std_err = stats.linregress(XX[indices_nan_not], jsec_ocr[indices_nan_not])
+    jsec_ocr[indices_nan_yes] = np.round(slope*XX[indices_nan_yes] + intercept, decimals=0)
 
-        except ValueError:
-            fname_new = '%s/%7.7d_%s_bad.png' % (fdir_out, startN, date_s)
-
-        # save some bad
-        if 'bad' in fname_new and len(fnames_new)>2:
-            if ('bad' not in fnames_new[-1]) and ('bad' not in fnames_new[-2]):
-                time_s1 = fnames_new[-1].split('_')[-2]
-                time_s2 = fnames_new[-2].split('_')[-2]
-                if time_s1 == time_s2:
-                    dtime0 = datetime.datetime.strptime('%s %s' % (date_s, time_s1), '%Y-%m-%d %H:%M:%S')
-                    newString = (dtime0+datetime.timedelta(seconds=1)).strftime('%H:%M:%S')
-                else:
-                    dtime0 = datetime.datetime.strptime('%s %s' % (date_s, time_s1), '%Y-%m-%d %H:%M:%S')
-                    newString = dtime0.strftime('%H:%M:%S')
-                fname_new = '%s/%7.7d_%s_%s_okay.png' % (fdir_out, startN, date_s, newString)
+    for i in XX:
+        fname  = fnames[i]
+        ID_str = fname.split('/')[-1][:-4]
+        dtimeString = (dtime_ref+datetime.timedelta(seconds=jsec_ocr[i])).strftime('%Y-%m-%d_%H:%M:%S')
+        if i in indices_nan_yes:
+            fname_new = '%s/%s_%s_bad.png' % (fdir_out, dtimeString, ID_str)
+        else:
+            fname_new = '%s/%s_%s_good.png' % (fdir_out, dtimeString, ID_str)
 
         os.system('cp %s %s' % (fname, fname_new))
-
-        startN += 1
-        fnames_new.append(fname_new)
-    return startN
 
 def MAIN_CAM(init, dtime_s, dtime_e, fdir_cam_data='/argus/field/arise/video'):
 
@@ -135,17 +121,34 @@ def MAIN_CAM(init, dtime_s, dtime_e, fdir_cam_data='/argus/field/arise/video'):
         filename       = fname.split('/')[-1][:-4]
         fdir_out_png   = '%s/%s' % (init.fdir_ncam_graph, filename)
         cropRegion     = (134, 1926, 258, 1944)
-        RENAME_PNG(fdir_out_png, init.fdir_ncam_graph, cropRegion, dtime)
-        #  AVI2PNG(fname, fdir_out_png)
-    exit()
+        AVI2PNG(fname, fdir_out_png)
+        RENAME_PNG(fdir_out_png, init.fdir_ncam_graph, cropRegion, dtime_ref=dtime)
 
     for fname in fnames_f:
-        filename   = fname.split('/')[-1][:-4]
-        fdir_out   = '%s/%s' % (init.fdir_fcam_graph, filename)
-        cropRegion = (151, 1064, 274, 1077)
-        #  AVI2PNG(fname, fdir_out)
+        dtime_str      = fname[-23:-4]
+        dtime          = datetime.datetime.strptime(dtime_str, '%Y-%m-%d-%H-%M-%S')
+        filename       = fname.split('/')[-1][:-4]
+        fdir_out_png   = '%s/%s' % (init.fdir_fcam_graph, filename)
+        cropRegion     = (151, 1064, 274, 1077)
+        AVI2PNG(fname, fdir_out_png)
+        RENAME_PNG(fdir_out_png, init.fdir_fcam_graph, cropRegion, dtime_ref=dtime)
 
     exit()
+
+def CAL_ZSCORE(X, c=7.5):
+    """
+    cite: Zou and Zeng 2006
+    "A quality control precedure for GPS radio occulation data"
+    """
+    n    = X.size
+    M    = np.median(X)
+    MAD  = np.median(np.abs(X-M))
+    w    = (X - M)/(c*MAD)
+    w[w>1.0] = 1.0
+    X_bi = M + np.sum((X-M) * (1.0-w**2)**2) / np.sum((1.0-w**2)**2)
+    BSD  = (n * np.sum((X-M)**2 * (1.0-w**2)**4))**0.5 / np.abs(np.sum((1.0-w**2)*(1.0-5.0*w**2)))
+    Z    = (X-X_bi)/BSD
+    return Z
 
 if __name__ == '__main__':
     from pre_vid import ANIM_INIT
