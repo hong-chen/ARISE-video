@@ -167,10 +167,14 @@ if __name__ == '__main__':
     #  dtime_e = datetime.datetime(2014, 9, 22,  0, 0)
 
     # --- 2014-09-24 ---
-    date = datetime.datetime(2014, 9, 24)
-    dtime_s = datetime.datetime(2014, 9, 24, 21, 0)
-    dtime_e = datetime.datetime(2014, 9, 25,  1, 0)
+    #  date = datetime.datetime(2014, 9, 24)
+    #  dtime_s = datetime.datetime(2014, 9, 24, 21, 0)
+    #  dtime_e = datetime.datetime(2014, 9, 25,  1, 0)
 
+    # --- 2014-10-02 ---
+    date = datetime.datetime(2014, 10, 2)
+    dtime_s = datetime.datetime(2014, 10, 2, 23, 0)
+    dtime_e = datetime.datetime(2014, 10, 3,  5, 0)
 
     init = ANIM_INIT(date)
     MAIN_CAM(init, dtime_s, dtime_e)
