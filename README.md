@@ -9,8 +9,14 @@ __Dependencies__:
 
 __Functions__:
 - `AVI2PNG(fname_avi, fdir_out_png, fps=2, verbose=False)`
+  - `fname_avi`: full path of the `avi` video file;
+  - `fname_out_png`: directory where to put `png` outputs;
+  - `fps=2`: frame per second `=2`;
+  - `verbose=False`: verbose flag turned off.
+\\
 - `GTIME_IMAGE(fname, cropRegion, upscaleN=20, iterN=4)`
-- `RENAME_PNG(fdir_in, fdir_out, cropRegion, fps=2, dtime_ref=datetime.datetime(1, 1, 1), sec_threshold=1.5)`
+- `RENAME_PNG(fdir_in, fdir_out, dtime_ref, cropRegion, fps=2, sec_threshold=1.5, sec_vid_len=3600.0)`
+- `MAIN_CAM(init, dtime_s, dtime_e, fdir_cam_data='/argus/field/arise/video')`
 
 
 ------------
