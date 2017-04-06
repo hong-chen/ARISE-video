@@ -8,7 +8,6 @@ from pre_kt19 import GDATA_KT19
 from pre_ssfr import GDATA_SSFR_NAT, GDATA_SSFR_SPEC
 
 def PLT_JOIN(statements, testMode=False):
-    #{{{
 
     init, time_sec0 = statements
 
@@ -26,16 +25,11 @@ def PLT_JOIN(statements, testMode=False):
     ax8 = plt.subplot(gs[3:6, 3:6])
 
     # flight track
-    #{{{
     fnames      = sorted(glob.glob('%s/*%s*.png' % (init.fdir_trk_graph, dtime0_s)))
     NFile       = len(fnames)
-    fnames_old  = sorted(glob.glob('%s/*%s*.png' % (init.fdir_trk_graph, (dtime0_s.replace('_', '-')).replace(':', '-'))))
-    Nold        = len(fnames_old)
     ax1.axis('off')
     if NFile > 0:
         fname = fnames[0]
-    elif Nold > 0:
-        fname = fnames_old[0]
     else:
         fname = None
 
@@ -45,41 +39,18 @@ def PLT_JOIN(statements, testMode=False):
         ax1.set_title('Flight Track', fontsize=14)
 
     ax1.axis('off')
-    #}}}
 
     # forward camera
-    #{{{
-    if init.date_s=='2014-09-07' and time_sec0>=86400.0:
-        dtime0_s_cam = (dtime0-datetime.timedelta(seconds=86400)).strftime('%Y-%m-%d_%H:%M:%S')
-        fnames_good = sorted(glob.glob('%s/*%s*_good.png' % (init.fdir_fcam_graph, dtime0_s_cam)))
-        Ngood       = len(fnames_good)
-        fnames_fine = sorted(glob.glob('%s/*%s*_fine.png' % (init.fdir_fcam_graph, dtime0_s_cam)))
-        Nfine       = len(fnames_fine)
-        fnames_okay = sorted(glob.glob('%s/*%s*_okay.png' % (init.fdir_fcam_graph, dtime0_s_cam)))
-        Nokay       = len(fnames_okay)
-        fnames_old  = sorted(glob.glob('%s/*%s*.png' % (init.fdir_fcam_graph, (dtime0_s_cam.replace('_', '-')).replace(':', '-'))))
-        Nold        = len(fnames_old)
-    else:
-        fnames_good = sorted(glob.glob('%s/*%s*_good.png' % (init.fdir_fcam_graph, dtime0_s)))
-        Ngood       = len(fnames_good)
-        fnames_fine = sorted(glob.glob('%s/*%s*_fine.png' % (init.fdir_fcam_graph, dtime0_s)))
-        Nfine       = len(fnames_fine)
-        fnames_okay = sorted(glob.glob('%s/*%s*_okay.png' % (init.fdir_fcam_graph, dtime0_s)))
-        Nokay       = len(fnames_okay)
-        fnames_old  = sorted(glob.glob('%s/*%s*.png' % (init.fdir_fcam_graph, (dtime0_s.replace('_', '-')).replace(':', '-'))))
-        Nold        = len(fnames_old)
+    fnames_good = sorted(glob.glob('%s/*%s*_good.png' % (init.fdir_fcam_graph, dtime0_s)))
+    Ngood       = len(fnames_good)
+    fnames_bad  = sorted(glob.glob('%s/*%s*_bad.png' % (init.fdir_fcam_graph, dtime0_s)))
+    Nbad        = len(fnames_bad)
 
     if Ngood > 0:
         fname = fnames_good[0]
         ax2.set_title('Forward Camera', fontsize=14)
-    elif Nfine > 0:
-        fname = fnames_fine[0]
-        ax2.set_title('Forward Camera', fontsize=14, color='orange')
-    elif Nokay > 0:
-        fname = fnames_okay[0]
-        ax2.set_title('Forward Camera', fontsize=14, color='red')
-    elif Nold  > 0:
-        fname = fnames_old[0]
+    elif Nbad > 0:
+        fname = fnames_bad[0]
         ax2.set_title('Forward Camera', fontsize=14, color='dimgray')
     else:
         fname = None
@@ -89,41 +60,18 @@ def PLT_JOIN(statements, testMode=False):
         ax2.imshow(image_data)
 
     ax2.axis('off')
-    #}}}
 
     # nadir camera
-    #{{{
-    if init.date_s=='2014-09-07' and time_sec0>=86400.0:
-        dtime0_s_cam = (dtime0-datetime.timedelta(seconds=86400)).strftime('%Y-%m-%d_%H:%M:%S')
-        fnames_good = sorted(glob.glob('%s/*%s*_good.png' % (init.fdir_ncam_graph, dtime0_s_cam)))
-        Ngood       = len(fnames_good)
-        fnames_fine = sorted(glob.glob('%s/*%s*_fine.png' % (init.fdir_ncam_graph, dtime0_s_cam)))
-        Nfine       = len(fnames_fine)
-        fnames_okay = sorted(glob.glob('%s/*%s*_okay.png' % (init.fdir_ncam_graph, dtime0_s_cam)))
-        Nokay       = len(fnames_okay)
-        fnames_old  = sorted(glob.glob('%s/*%s*.png' % (init.fdir_ncam_graph, (dtime0_s_cam.replace('_', '-')).replace(':', '-'))))
-        Nold        = len(fnames_old)
-    else:
-        fnames_good = sorted(glob.glob('%s/*%s*_good.png' % (init.fdir_ncam_graph, dtime0_s)))
-        Ngood       = len(fnames_good)
-        fnames_fine = sorted(glob.glob('%s/*%s*_fine.png' % (init.fdir_ncam_graph, dtime0_s)))
-        Nfine       = len(fnames_fine)
-        fnames_okay = sorted(glob.glob('%s/*%s*_okay.png' % (init.fdir_ncam_graph, dtime0_s)))
-        Nokay       = len(fnames_okay)
-        fnames_old  = sorted(glob.glob('%s/*%s*.png' % (init.fdir_ncam_graph, (dtime0_s.replace('_', '-')).replace(':', '-'))))
-        Nold        = len(fnames_old)
+    fnames_good = sorted(glob.glob('%s/*%s*_good.png' % (init.fdir_ncam_graph, dtime0_s)))
+    Ngood       = len(fnames_good)
+    fnames_bad  = sorted(glob.glob('%s/*%s*_bad.png' % (init.fdir_ncam_graph, dtime0_s)))
+    Nbad        = len(fnames_bad)
 
     if Ngood > 0:
         fname = fnames_good[0]
         ax3.set_title('Nadir Camera', fontsize=14)
-    elif Nfine > 0:
-        fname = fnames_fine[0]
-        ax3.set_title('Nadir Camera', fontsize=14, color='orange')
-    elif Nokay > 0:
-        fname = fnames_okay[0]
-        ax3.set_title('Nadir Camera', fontsize=14, color='red')
-    elif Nold > 0:
-        fname = fnames_old[0]
+    elif Nbad > 0:
+        fname = fnames_bad[0]
         ax3.set_title('Nadir Camera', fontsize=14, color='dimgray')
     else:
         fname = None
@@ -136,10 +84,8 @@ def PLT_JOIN(statements, testMode=False):
             ax3.imshow(image_data)
 
     ax3.axis('off')
-    #}}}
 
     # ssfr time series
-    #{{{
     time_sec, spec_zen, spec_nad = GDATA_SSFR_NAT(init.fname_ssfr)
     logic = (time_sec >= time_sec0-720.0) & (time_sec <= time_sec0+720.0)
     xx    = time_sec[logic]
@@ -158,7 +104,6 @@ def PLT_JOIN(statements, testMode=False):
     #}}}
 
     # ssfr spectra
-    #{{{
     time_sec, wvl_zen, spec_zen, wvl_nad, spec_nad = GDATA_SSFR_SPEC(init.fname_ssfr, time_sec0)
     ax8.xaxis.set_major_locator(FixedLocator(np.arange(200, 2201, 400)))
     ax8.set_xlim([200, 2200])
@@ -174,7 +119,6 @@ def PLT_JOIN(statements, testMode=False):
     #}}}
 
     # kt-19 time series
-    #{{{
     time_sec, zenT, nadT = GDATA_KT19(init.fname_kt19)
     logic_n = (time_sec >= time_sec0-720.0) & (time_sec <= time_sec0+720.0)
     xx_n    = time_sec[logic_n]
@@ -198,7 +142,6 @@ def PLT_JOIN(statements, testMode=False):
     ax6.yaxis.set_ticks_position('both')
     ax6.yaxis.set_label_position('right')
     ax6.set_title('KT-19', fontsize=14)
-    #}}}
 
     fig.suptitle("%s UTC" % (dtime0.strftime('%Y-%m-%d %H:%M:%S')), fontsize=20, y=0.96)
 
@@ -218,7 +161,6 @@ def PLT_JOIN(statements, testMode=False):
     plt.savefig(fname_graph)
     print '%s is complete.' % fname_graph
     plt.close(fig)
-    #}}}
 
 def PLT_JOIN_V6(statements, testMode=False):
     #{{{
@@ -432,7 +374,6 @@ def PLT_JOIN_V6(statements, testMode=False):
     print '%s is complete.' % fname_graph
     plt.close(fig)
     #}}}
-
 
 def PLT_JOIN_V5(statements, testMode=False):
     #{{{
@@ -1363,7 +1304,7 @@ def MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12):
 
 if __name__ == '__main__':
     import matplotlib as mpl
-    #  mpl.use('Agg')
+    mpl.use('Agg')
     import matplotlib.pyplot as plt
     import matplotlib.gridspec as gridspec
     from matplotlib.ticker import FixedLocator
@@ -1371,32 +1312,31 @@ if __name__ == '__main__':
     import matplotlib.image as mpimg
     import matplotlib.patches as patches
     from pre_vid import ANIM_INIT
-    #  date = datetime.datetime(2014, 9, 4)
-    #  date = datetime.datetime(2014, 9, 7)
-    #  date = datetime.datetime(2014, 9, 9)
-    #  date = datetime.datetime(2014, 9, 16)
-    #  date = datetime.datetime(2014, 9, 17)
-    #  date = datetime.datetime(2014, 9, 19)
-    date = datetime.datetime(2014, 9, 10)
 
+    # --- 2014-09-10 ---
+    #  date = datetime.datetime(2014, 9, 10)
+    #  init = ANIM_INIT(date)
+    #  time_sec_s = (19.0+ 5.0/60.0)*3600.0
+    #  time_sec_e = (23.0+55.0/60.0)*3600.0
+    #  MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12)
+
+    # --- 2014-09-21 ---
+    #  date = datetime.datetime(2014, 9, 21)
+    #  init = ANIM_INIT(date)
+    #  time_sec_s = (18.0+30.0/60.0)*3600.0
+    #  time_sec_e = (23.0+10.0/60.0)*3600.0
+    #  MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12)
+
+    # --- 2014-09-24 ---
+    date = datetime.datetime(2014, 9, 24)
     init = ANIM_INIT(date)
+    time_sec_s = (21.0+10.0/60.0)*3600.0
+    time_sec_e = (24.0+50.0/60.0)*3600.0
+    MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12)
 
     # ============= one frame test ===============
-    PLT_JOIN([init, 19.5*3600.0], testMode=True)
-    exit()
+    #  date = datetime.datetime(2014, 9, 24)
+    #  init = ANIM_INIT(date)
+    #  PLT_JOIN([init, 23.5*3600.0], testMode=True)
+    #  exit()
     # ============================================
-
-    #time_sec_s = (17.0+50.0/60.0)*3600.0
-    #time_sec_s = (19.0+50.0/60.0)*3600.0
-    #time_sec_e = (23.0+50.0/60.0)*3600.0
-    time_sec_s = (23.0+50.0/60.0)*3600.0
-    time_sec_e = (24.0+50.0/60.0)*3600.0
-    #time_sec_s = (19.0+30.0/60.0)*3600.0
-    #time_sec_e = (20.0+50.0/60.0)*3600.0
-
-    #time_sec_s = 20.10*3600.0
-    #time_sec_e = 20.105*3600.0
-
-    #os.system('rm -rf %s' % init.fdir_join_graph)
-    #os.system('mkdir -p %s' % init.fdir_join_graph)
-    MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=15)

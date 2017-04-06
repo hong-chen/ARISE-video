@@ -40,7 +40,7 @@ def GTIME_IMAGE(fname, cropRegion, upscaleN=20, iterN=4):
     string = image_to_string(img, config='digits')
     return string
 
-def RENAME_PNG(fdir_in, fdir_out, cropRegion, fps=2, dtime_ref=datetime.datetime(1, 1, 1), sec_threshold=1.5):
+def RENAME_PNG(fdir_in, fdir_out, dtime_ref, cropRegion, fps=2, sec_threshold=1.5, sec_vid_len=3600.0):
 
     fnames = sorted(glob.glob('%s/*.png' % fdir_in))
     NFile  = len(fnames)
@@ -48,14 +48,30 @@ def RENAME_PNG(fdir_in, fdir_out, cropRegion, fps=2, dtime_ref=datetime.datetime
     XX = np.arange(NFile)
 
     jsec_ocr = np.zeros(NFile, dtype=np.float64) # Julian seconds from OCR by tesseract
-    # first iteration to get time stamp from OCR
+    # get time stamp from OCR
     for i in XX:
         fname     = fnames[i]
         rawString = GTIME_IMAGE(fname, cropRegion)
         newString = rawString.replace(' ', '')
         try:
             dtime = datetime.datetime.strptime(newString, '%Y-%m-%d%H:%M:%S')
-            jsec_ocr[i] = (dtime-dtime_ref).total_seconds()
+            jsec_ocr0 = (dtime-dtime_ref).total_seconds()
+
+            if np.abs(jsec_ocr0) > sec_vid_len:
+
+                dateStr       = dtime_ref.strftime('%Y-%m-%d')
+                timeStr       = dtime.strftime('%H:%M:%S')
+                dtime_new     = datetime.datetime.strptime(dateStr+timeStr, '%Y-%m-%d%H:%M:%S')
+                jsec_ocr0_new = (dtime_new-dtime_ref).total_seconds()
+
+                if -1.0 < (jsec_ocr0_new-jsec_ocr[i-1]) < 2.0:
+                    jsec_ocr[i] = jsec_ocr0_new
+                else:
+                    jsec_ocr[i] = np.nan
+
+            else:
+                jsec_ocr[i] = jsec_ocr0
+
         except ValueError:
             jsec_ocr[i] = np.nan
 
@@ -96,85 +112,71 @@ def RENAME_PNG(fdir_in, fdir_out, cropRegion, fps=2, dtime_ref=datetime.datetime
 
 def MAIN_CAM(init, dtime_s, dtime_e, fdir_cam_data='/argus/field/arise/video'):
 
-    fnames_n_all = sorted(glob.glob('%s/Nadir*.avi' % (fdir_cam_data)))
-    fnames_n = []
-    for fname in fnames_n_all:
-        dtime_str = fname[-23:-4]
-        dtime     = datetime.datetime.strptime(dtime_str, '%Y-%m-%d-%H-%M-%S')
-        if (dtime >= dtime_s) and (dtime <= dtime_e):
-            fnames_n.append(fname)
+    for tag in ['Nadir', 'Forward']:
+        fnames_all = sorted(glob.glob('%s/%s*.avi' % (fdir_cam_data, tag)))
+        for fname in fnames_all:
+            dtime_str = fname[-23:-4]
+            dtime     = datetime.datetime.strptime(dtime_str, '%Y-%m-%d-%H-%M-%S')
 
-    fnames_f = []
-    fnames_f_all = sorted(glob.glob('%s/Forward*.avi' % (fdir_cam_data)))
-    for fname in fnames_f_all:
-        dtime_str = fname[-23:-4]
-        dtime     = datetime.datetime.strptime(dtime_str, '%Y-%m-%d-%H-%M-%S')
-        if (dtime >= dtime_s) and (dtime <= dtime_e):
-            fnames_f.append(fname)
+            if (dtime >= dtime_s) and (dtime <= dtime_e):
+                filename_no_ext = fname.split('/')[-1][:-4]
+                if tag == 'Nadir':
+                    fdir_out     = init.fdir_ncam_graph
+                    fdir_out_png = '%s/%s' % (fdir_out, filename_no_ext)
+                    cropRegion   = (134, 1926, 258, 1944)
+                elif tag == 'Forward':
+                    fdir_out     = init.fdir_fcam_graph
+                    fdir_out_png = '%s/%s' % (fdir_out, filename_no_ext)
+                    cropRegion   = (151, 1064, 274, 1077)
 
-    # use ffmpeg to convert AVI video to PNG image
-    for fname in fnames_n:
-        dtime_str      = fname[-23:-4]
-        dtime          = datetime.datetime.strptime(dtime_str, '%Y-%m-%d-%H-%M-%S')
-        filename       = fname.split('/')[-1][:-4]
-        fdir_out_png   = '%s/%s' % (init.fdir_ncam_graph, filename)
-        cropRegion     = (134, 1926, 258, 1944)
-        AVI2PNG(fname, fdir_out_png)
-        RENAME_PNG(fdir_out_png, init.fdir_ncam_graph, cropRegion, dtime_ref=dtime)
+                AVI2PNG(fname, fdir_out_png)
+                RENAME_PNG(fdir_out_png, fdir_out, dtime, cropRegion)
 
-    for fname in fnames_f:
-        dtime_str      = fname[-23:-4]
-        dtime          = datetime.datetime.strptime(dtime_str, '%Y-%m-%d-%H-%M-%S')
-        filename       = fname.split('/')[-1][:-4]
-        fdir_out_png   = '%s/%s' % (init.fdir_fcam_graph, filename)
-        cropRegion     = (151, 1064, 274, 1077)
-        AVI2PNG(fname, fdir_out_png)
-        RENAME_PNG(fdir_out_png, init.fdir_fcam_graph, cropRegion, dtime_ref=dtime)
-
-def CAL_ZSCORE(X, c=7.5):
+def MODIFY_WRONG_MONTH(fdir, dtime_ref):
     """
-    cite: Zou and Zeng 2006
-    "A quality control precedure for GPS radio occulation data"
+    will be delete
     """
-    n    = X.size
-    M    = np.median(X)
-    MAD  = np.median(np.abs(X-M))
-    w    = (X - M)/(c*MAD)
-    w[w>1.0] = 1.0
-    X_bi = M + np.sum((X-M) * (1.0-w**2)**2) / np.sum((1.0-w**2)**2)
-    BSD  = (n * np.sum((X-M)**2 * (1.0-w**2)**4))**0.5 / np.abs(np.sum((1.0-w**2)*(1.0-5.0*w**2)))
-    Z    = (X-X_bi)/BSD
-    return Z
+    fnames = sorted(glob.glob('%s/*.png' % fdir))
+    for fname in fnames:
+        filename  = fname.split('/')[-1]
+        newString = filename[:19]
+        dtime = datetime.datetime.strptime(newString, '%Y-%m-%d_%H:%M:%S')
+        diff  = np.abs((dtime-dtime_ref).total_seconds())
+        if diff > 86400.0*2:
+            dateString = dtime_ref.strftime('%Y-%m-%d')
+            filename_new = '%s_%s' % (dateString, filename[11:])
+            print(filename)
+            print(filename_new)
+            print()
+            #  os.system('mv %s %s/%s' % (fname, fdir, filename_new))
 
 if __name__ == '__main__':
     from pre_vid import ANIM_INIT
-    #  date = datetime.datetime(2014, 9, 4)
-    #  date = datetime.datetime(2014, 9, 7)
-    #  date = datetime.datetime(2014, 9, 9)
 
-    # --- 2014-09-10 ---
-    #  date = datetime.datetime(2014, 9, 10)
-    #  dtime_s = datetime.datetime(2014, 9, 10, 19, 0)
-    #  dtime_e = datetime.datetime(2014, 9, 11,  0, 0)
+    # --- 2014-09-10 --- (5\cu)
+    date = datetime.datetime(2014, 9, 10)
+    dtime_s = datetime.datetime(2014, 9, 10, 19, 0)
+    dtime_e = datetime.datetime(2014, 9, 11,  0, 0)
+    init = ANIM_INIT(date)
+    MAIN_CAM(init, dtime_s, dtime_e)
 
-    #  date = datetime.datetime(2014, 9, 16)
-    #  date = datetime.datetime(2014, 9, 17)
-    #  date = datetime.datetime(2014, 9, 19)
-
-    # --- 2014-09-21 ---
+    # --- 2014-09-21 --- (5\cu)
     #  date = datetime.datetime(2014, 9, 21)
     #  dtime_s = datetime.datetime(2014, 9, 21, 18, 0)
     #  dtime_e = datetime.datetime(2014, 9, 22,  0, 0)
+    #  init = ANIM_INIT(date)
+    #  MAIN_CAM(init, dtime_s, dtime_e)
 
-    # --- 2014-09-24 ---
+    # --- 2014-09-24 --- (5\cu)
     #  date = datetime.datetime(2014, 9, 24)
     #  dtime_s = datetime.datetime(2014, 9, 24, 21, 0)
     #  dtime_e = datetime.datetime(2014, 9, 25,  1, 0)
+    #  init = ANIM_INIT(date)
+    #  MAIN_CAM(init, dtime_s, dtime_e)
 
-    # --- 2014-10-02 ---
-    date = datetime.datetime(2014, 10, 2)
-    dtime_s = datetime.datetime(2014, 10, 2, 23, 0)
-    dtime_e = datetime.datetime(2014, 10, 3,  5, 0)
-
-    init = ANIM_INIT(date)
-    MAIN_CAM(init, dtime_s, dtime_e)
+    # --- 2014-10-02 --- (5\cu)
+    #  date = datetime.datetime(2014, 10, 2)
+    #  dtime_s = datetime.datetime(2014, 10, 2, 23, 0)
+    #  dtime_e = datetime.datetime(2014, 10, 3,  5, 0)
+    #  init = ANIM_INIT(date)
+    #  MAIN_CAM(init, dtime_s, dtime_e)
