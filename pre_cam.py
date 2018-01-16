@@ -112,8 +112,7 @@ def RENAME_PNG(fdir_in, fdir_out, dtime_ref, cropRegion, fps=2, sec_threshold=1.
 
 def MAIN_CAM(init, dtime_s, dtime_e, fdir_cam_data='/argus/field/arise/video'):
 
-    # for tag in ['Nadir', 'Forward']:
-    for tag in ['Nadir']:
+    for tag in ['Nadir', 'Forward']:
         fnames_all = sorted(glob.glob('%s/%s*.avi' % (fdir_cam_data, tag)))
         for fname in fnames_all:
             dtime_str = fname[-23:-4]
@@ -161,12 +160,20 @@ if __name__ == '__main__':
     # init = ANIM_INIT(date)
     # MAIN_CAM(init, dtime_s, dtime_e)
 
-    # --- 2014-09-11 --- (5\cu)
-    date = datetime.datetime(2014, 9, 11)
-    dtime_s = datetime.datetime(2014, 9, 11, 20, 30, 0)
-    dtime_e = datetime.datetime(2014, 9, 11, 23, 0, 0)
+    # --- 2014-09-11 --- (5\cu) Above clouds
+    # date = datetime.datetime(2014, 9, 11)
+    # dtime_s = datetime.datetime(2014, 9, 11, 20, 30, 0)
+    # dtime_e = datetime.datetime(2014, 9, 11, 23, 0, 0)
+    # init = ANIM_INIT(date)
+    # MAIN_CAM(init, dtime_s, dtime_e)
+
+    # --- 2014-09-13 --- (5\cu) Below clouds
+    date = datetime.datetime(2014, 9, 13)
+    dtime_s = datetime.datetime(2014, 9, 13, 19, 30, 0)
+    dtime_e = datetime.datetime(2014, 9, 13, 23, 0, 0)
     init = ANIM_INIT(date)
     MAIN_CAM(init, dtime_s, dtime_e)
+    exit()
 
     # --- 2014-09-21 --- (5\cu)
     #  date = datetime.datetime(2014, 9, 21)

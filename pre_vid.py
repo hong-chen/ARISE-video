@@ -2,11 +2,10 @@ import os
 import datetime
 import glob
 import h5py
-from PIL import Image
 
 class ANIM_INIT:
     def __init__(self, date, local_dir='/argus/home/chen/work/01_anim/new'):
-    #{{{
+
         self.date   = date
         self.date_s = date.strftime('%Y-%m-%d')
 
@@ -37,14 +36,14 @@ class ANIM_INIT:
 
         # create directories
         if os.path.exists(self.fdir):
-            print 'Warning [ANIM_INIT]: %s already exists!' % self.fdir
+            print('Warning [ANIM_INIT]: %s already exists!' % self.fdir)
             self.fname_ssfr      = '%s/ssfr.out' % self.fdir_ssfr_data
             self.fname_kt19      = '%s/temp.txt' % self.fdir_kt19_data
             self.fname_trk       = '%s/trk.hsk'  % self.fdir_trk_data
             self.fname_map       = '%s/map.h5'   % self.fdir_trk_data
             self.fname_map_tiff  = '%s/map.tiff'   % self.fdir_trk_data
         else:
-            print 'Message [ANIM_INIT]: creating directories...'
+            print('Message [ANIM_INIT]: creating directories...')
             os.system('mkdir -p %s' % self.fdir)
             os.system('mkdir -p %s' % self.fdir_trk)
             os.system('mkdir -p %s' % self.fdir_cam)
@@ -64,22 +63,19 @@ class ANIM_INIT:
             os.system('mkdir -p %s' % self.fdir_trk_data)
             os.system('mkdir -p %s' % self.fdir_ssfr_data)
             os.system('mkdir -p %s' % self.fdir_kt19_data)
-            print 'Message [ANIM_INIT]: directories created.'
-            print 'Please add data into corresponding directory manually...'
-            print '--------------------------------------------------------'
-            print 'file name of trk.hsk under %s;' % self.fdir_trk_data
-            print 'file name of map.tiff under %s;' % self.fdir_trk_data
-            print 'file name of ssfr.out under %s;' % self.fdir_ssfr_data
-            print 'file name of temp.txt under %s;' % self.fdir_kt19_data
-            print '--------------------------------------------------------'
-            print 'and then rerun this program.'
+            print('Message [ANIM_INIT]: directories created.')
+            print('Please add data into corresponding directory manually...')
+            print('--------------------------------------------------------')
+            print('file name of trk.hsk under %s;' % self.fdir_trk_data)
+            print('file name of map.tiff under %s;' % self.fdir_trk_data)
+            print('file name of ssfr.out under %s;' % self.fdir_ssfr_data)
+            print('file name of temp.txt under %s;' % self.fdir_kt19_data)
+            print('--------------------------------------------------------')
+            print('and then rerun this program.')
             exit()
 
-
-    #}}}
-
 def MAIN_TEST(init, dtime_s, dtime_e):
-    #{{{
+
     index  = 1
     while dtime_s <= dtime_e:
         dtime_s += datetime.timedelta(seconds=1)
@@ -93,10 +89,10 @@ def MAIN_TEST(init, dtime_s, dtime_e):
         N_track   = len(glob.glob('%s/*%s*.png' % (init.fdir_trk_graph , time_stamp0)))
 
         if (N_forward!=1) | (N_nadir!=1) | (N_track!=1) | (N_ssfr!=1):
-            print index, time_stamp0
-            print N_forward, N_nadir, N_track, N_ssfr
-            print '-'*66
-    #}}}
+            print(index, time_stamp0)
+            print(N_forward, N_nadir, N_track, N_ssfr)
+            print('-'*66)
+
 
 def MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p'):
     #{{{
@@ -125,7 +121,7 @@ def MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p'):
 
 if __name__ == '__main__':
     #date = datetime.datetime(2014, 9, 4)
-    #  date = datetime.datetime(2014, 9, 7)
+    #date = datetime.datetime(2014, 9, 7)
     #date = datetime.datetime(2014, 9, 9)
     #date = datetime.datetime(2014, 9, 16)
     #date = datetime.datetime(2014, 9, 17)
@@ -160,8 +156,8 @@ if __name__ == '__main__':
     # MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
 
     # --- 2014-09-11 ---
-    date = datetime.datetime(2014, 9, 11)
-    init = ANIM_INIT(date)
+    # date = datetime.datetime(2014, 9, 11)
+    # init = ANIM_INIT(date)
     # dtime_s = datetime.datetime(2014, 9, 11, 20, 30, 0)
     # dtime_e = datetime.datetime(2014, 9, 11, 23, 0, 0)
     # MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
