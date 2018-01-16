@@ -139,11 +139,11 @@ if __name__ == '__main__':
     #  MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
 
     # --- 2014-09-21 ---
-    date = datetime.datetime(2014, 9, 21)
-    init = ANIM_INIT(date)
-    dtime_s = datetime.datetime(2014, 9, 21, 18, 30, 0)
-    dtime_e = datetime.datetime(2014, 9, 21, 23, 10, 0)
-    MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
+    #  date = datetime.datetime(2014, 9, 21)
+    #  init = ANIM_INIT(date)
+    #  dtime_s = datetime.datetime(2014, 9, 21, 18, 30, 0)
+    #  dtime_e = datetime.datetime(2014, 9, 21, 23, 10, 0)
+    #  MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
 
     # --- 2014-09-24 ---
     #  date = datetime.datetime(2014, 9, 24)
@@ -152,20 +152,19 @@ if __name__ == '__main__':
     #  dtime_e = datetime.datetime(2014, 9, 25,  0, 50, 0)
     #  MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
 
-    #  dtime_s = datetime.datetime(2014, 9, 7, 19, 50, 0)
-    #  dtime_e = datetime.datetime(2014, 9, 8, 0, 50, 0)
+    # --- 2014-10-02 ---
+    # date = datetime.datetime(2014, 10, 2)
+    # init = ANIM_INIT(date)
+    # dtime_s = datetime.datetime(2014, 10, 3, 0, 0, 0)
+    # dtime_e = datetime.datetime(2014, 10, 3, 4, 0, 0)
+    # MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
 
-    #dtime_s = datetime.datetime(2014, 9, 9, 19, 50, 0)
-    #dtime_e = datetime.datetime(2014, 9, 9, 23, 50, 0)
-
-    #dtime_s = datetime.datetime(2014, 9, 16, 18, 50, 0)
-    #dtime_e = datetime.datetime(2014, 9, 16, 23, 50, 0)
-
-    #dtime_s = datetime.datetime(2014, 9, 17, 19, 50, 0)
-    #dtime_e = datetime.datetime(2014, 9, 17, 23, 50, 0)
-
-    #dtime_s = datetime.datetime(2014, 9, 19, 17, 50, 0)
-    #dtime_e = datetime.datetime(2014, 9, 19, 23, 50, 0)
+    # --- 2014-09-11 ---
+    date = datetime.datetime(2014, 9, 11)
+    init = ANIM_INIT(date)
+    # dtime_s = datetime.datetime(2014, 9, 11, 20, 30, 0)
+    # dtime_e = datetime.datetime(2014, 9, 11, 23, 0, 0)
+    # MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
 
     #+++++++++++++++++++ test ++++++++++++++++++
     #MAIN_TEST(init, dtime_s, dtime_e)

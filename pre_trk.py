@@ -330,7 +330,7 @@ def TEST_TRK_MAP(init, plt_trk=False):
 
 if __name__ == '__main__':
     import matplotlib as mpl
-    mpl.use('Agg')
+    #  mpl.use('Agg')
     import matplotlib.pyplot as plt
     from mpl_toolkits.basemap import Basemap
     from matplotlib import rcParams
@@ -354,8 +354,8 @@ if __name__ == '__main__':
 
     # ============= test map track ================
     #  step 1: find where to crop on NASA WorldView
-    #  TEST_TRK_MAP(init, plt_trk=True)
-    #  exit()
+    TEST_TRK_MAP(init, plt_trk=True)
+    exit()
     #  CDATA_MAP_H5(init.fname_map_tiff, init.fname_map)
     #  exit()
     #  plt  = PLT_TRK_MAP([init, 19.8333*3600.0, 23.99*3600.0], Nloc_inset=4, testMode=True)
