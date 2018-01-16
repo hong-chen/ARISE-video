@@ -31,7 +31,7 @@ def GTIME_IMAGE(fname, cropRegion, upscaleN=20, iterN=4):
     img = Image.open(fname)
     img = img.crop(cropRegion)
     width, height = img.size
-    for i in xrange(iterN):
+    for i in range(iterN):
         img = img.convert('L')
         img = img.resize((width*upscaleN, height*upscaleN), Image.BICUBIC)
 
@@ -151,6 +151,7 @@ def MODIFY_WRONG_MONTH(fdir, dtime_ref):
             #  os.system('mv %s %s/%s' % (fname, fdir, filename_new))
 
 if __name__ == '__main__':
+
     from pre_vid import ANIM_INIT
 
     # --- 2014-09-10 --- (5\cu)

@@ -120,6 +120,8 @@ def MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p'):
     #}}}
 
 if __name__ == '__main__':
+    pass
+
     #date = datetime.datetime(2014, 9, 4)
     #date = datetime.datetime(2014, 9, 7)
     #date = datetime.datetime(2014, 9, 9)
