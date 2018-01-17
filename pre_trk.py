@@ -3,10 +3,17 @@ import numpy as np
 import h5py
 import datetime
 import multiprocessing as mp
-from metHC import JD2DATE, DATE2JD
 
 def XY2LONLAT(x, y, a=6378137.0, e=0.08181919, phi_c_deg=70.0, lambda_0_deg=-45.0):
-    #{{{
+
+    """
+    This is a Python version of the MATLAB code from
+    https://www.mathworks.com/matlabcentral/fileexchange/32907-polar-stereographic-coordinate-transformation--map-to-lat-lon-?
+    Courtesy to Andy Bliss
+
+    Written by Hong Chen (me@hongchen.cz)
+    """
+
     phi_c_rad    = np.deg2rad(phi_c_deg)
     lambda_0_rad = np.deg2rad(lambda_0_deg)
 
@@ -40,10 +47,9 @@ def XY2LONLAT(x, y, a=6378137.0, e=0.08181919, phi_c_deg=70.0, lambda_0_deg=-45.
     lambda_deg = np.rad2deg(lambda_rad)
 
     return lambda_deg, phi_deg
-    #}}}
 
 def GDATA_MAP_TIFF(fname):
-    #{{{
+
     import gdal
     map_image = gdal.Open(fname)
     map_data   = map_image.ReadAsArray()
@@ -64,7 +70,6 @@ def GDATA_MAP_TIFF(fname):
     rgb      = np.swapaxes(np.swapaxes(map_data, 0, 2), 0, 1)
 
     return lon, lat, rgb
-    #}}}
 
 def CDATA_MAP_H5(fname_tiff, fname_h5):
     #{{{
@@ -77,7 +82,7 @@ def CDATA_MAP_H5(fname_tiff, fname_h5):
     #}}}
 
 def GDATA_TRK(fname, skip_header=66):
-    #{{{
+
     track_data = np.genfromtxt(fname, delimiter=',', skip_header=skip_header)
 
     time_sec = track_data[:, 0]
@@ -89,7 +94,7 @@ def GDATA_TRK(fname, skip_header=66):
     lon[logic] = np.nan
     lat[logic] = np.nan
     return time_sec, lon, lat, alt
-    #}}}
+
 
 def TIME_STAMP_TRK(delta_second, dtime0=datetime.datetime(2014, 9, 19, 0, 0, 0)):
     #{{{
@@ -100,8 +105,9 @@ def TIME_STAMP_TRK(delta_second, dtime0=datetime.datetime(2014, 9, 19, 0, 0, 0))
     #}}}
 
 class PLT_TRK_MAP:
+
     def __init__(self, statements, Nloc_inset=4, testMode=False):
-        #{{{
+
         init, time_sec_s, time_sec_e = statements
         self.Nloc = Nloc_inset
         self.testMode = testMode
@@ -131,6 +137,13 @@ class PLT_TRK_MAP:
             lat0 = 75.0
             width0  = 800000.0
             height0 = 800000.0
+            meridians = np.arange(-180, 181, 4)
+            parallels = np.arange(-90 , 91 , 1)
+        elif init.date_s == '2014-09-13':
+            lon0 = -134.0
+            lat0 = 72.8
+            width0  = 500000.0
+            height0 = 500000.0
             meridians = np.arange(-180, 181, 4)
             parallels = np.arange(-90 , 91 , 1)
         elif init.date_s == '2014-09-16':
@@ -216,7 +229,7 @@ class PLT_TRK_MAP:
         x, y = self.m(self.lon_trk, self.lat_trk)
         self.m.scatter(x[::10], y[::10], c='red', s=3, alpha=0.05)
 
-        for self.time_sec0 in xrange(int(time_sec_s), int(time_sec_e)):
+        for self.time_sec0 in range(int(time_sec_s), int(time_sec_e)):
             self.index0= np.argmin(np.abs(self.time_trk-self.time_sec0))
             self.time0 = self.time_trk[self.index0]
             self.alt0  = self.alt_trk[self.index0]
@@ -227,10 +240,9 @@ class PLT_TRK_MAP:
                 self.LOOP(init)
 
         plt.close(self.fig)
-        #}}}
 
     def LOOP(self, init):
-        #{{{
+
         ax0 = inset_axes(self.ax, width=2.5, height=1.33, loc=self.Nloc)
         ax0.patch.set_alpha(0.6)
         ax0.get_xaxis().set_visible(False)
@@ -281,10 +293,9 @@ class PLT_TRK_MAP:
         self.fig.axes[-1].remove()
         self.ax.lines[-1].remove()
         self.ax.lines[-1].remove()
-        #}}}
 
 def MAIN_TRK_MAP(init, time_sec_s, time_sec_e, ncpu=8):
-    #{{{
+
 
     time_sec = np.arange(time_sec_s, time_sec_e+2)
     N           = time_sec.size // ncpu
@@ -310,7 +321,7 @@ def MAIN_TRK_MAP(init, time_sec_s, time_sec_e, ncpu=8):
     #}}}
 
 def TEST_TRK_MAP(init, plt_trk=False):
-    #{{{
+
     time_trk, lon_trk, lat_trk, alt_trk = GDATA_TRK(init.fname_trk)
     alt_trk = alt_trk / 1000.0
     if plt_trk:
@@ -326,42 +337,49 @@ def TEST_TRK_MAP(init, plt_trk=False):
         cs1 = ax2.scatter(lon, lat, s=3, c=time_trk/3600.0, cmap='nipy_spectral')
         plt.show()
         exit()
-    #}}}
 
 if __name__ == '__main__':
+
     import matplotlib as mpl
-    #  mpl.use('Agg')
+    mpl.use('Agg')
     import matplotlib.pyplot as plt
     from mpl_toolkits.basemap import Basemap
     from matplotlib import rcParams
     from matplotlib.ticker import FixedLocator
-    from mpl_toolkits.axes_grid.inset_locator import inset_axes
+    from mpl_toolkits.axes_grid1.inset_locator import inset_axes
     from pre_vid import ANIM_INIT
+
     #  date = datetime.datetime(2014, 9, 4)  # done
     #  date = datetime.datetime(2014, 9, 7)  # done
     #  date = datetime.datetime(2014, 9, 9)  # done
     #  date = datetime.datetime(2014, 9, 10)  # doing
+    date = datetime.datetime(2014, 9, 13)  # doing
     #  date = datetime.datetime(2014, 9, 16) # done
     #  date = datetime.datetime(2014, 9, 17) # done
     #  date = datetime.datetime(2014, 9, 19) # done
     #  date = datetime.datetime(2014, 9, 21) # doing
     #  date = datetime.datetime(2014, 9, 24) # doing
-    date = datetime.datetime(2014, 10, 2) # doing
+    #  date = datetime.datetime(2014, 10, 2) # doing
     #  date = datetime.datetime(2014, 10, 4) # doing
-
 
     init = ANIM_INIT(date)
 
     # ============= test map track ================
-    #  step 1: find where to crop on NASA WorldView
-    TEST_TRK_MAP(init, plt_trk=True)
-    exit()
-    #  CDATA_MAP_H5(init.fname_map_tiff, init.fname_map)
-    #  exit()
-    #  plt  = PLT_TRK_MAP([init, 19.8333*3600.0, 23.99*3600.0], Nloc_inset=4, testMode=True)
-    #  plt  = PLT_TRK_MAP([init, 21.2*3600.0, 21.99*3600.0], Nloc_inset=4, testMode=True)
-    #  plt  = PLT_TRK_MAP([init, 24.8*3600.0, 24.99*3600.0], Nloc_inset=2, testMode=True)
-    #  exit()
+    # step 1.a: find where to crop on NASA WorldView
+    # TEST_TRK_MAP(init, plt_trk=True)
+    # exit()
+
+    # step 1.b: go to NASA WorldView and crop the region and save the image in GeoTIFF format.
+
+    # step 1.c: upload the GeoTIFF file to the "trk" directory as "map.tiff"
+
+    # step 1.d: convert "map.tiff" to "map.h5"
+    # CDATA_MAP_H5(init.fname_map_tiff, init.fname_map)
+    # exit()
+
+    # step 1.e: find a good map center and map range and location for the altitude plot
+    # plt  = PLT_TRK_MAP([init, 19.8333*3600.0, 23.99*3600.0], Nloc_inset=4, testMode=True)
+    # exit()
     # =============================================
 
     #  time_sec_s = (19.0+35.0/60.0)*3600.0
@@ -378,8 +396,8 @@ if __name__ == '__main__':
     #  time_sec_e = (23.0+10.0/60.0)*3600.0
     #  time_sec_s = (21.0+10.0/60.0)*3600.0
     #  time_sec_e = (24.0+50.0/60.0)*3600.0
-    time_sec_s = (23.0)*3600.0
-    time_sec_e = (29.0)*3600.0
+    time_sec_s = (19.5)*3600.0
+    time_sec_e = (23.0)*3600.0
 
-    MAIN_TRK_MAP(init, time_sec_s, time_sec_e, ncpu=10)
+    MAIN_TRK_MAP(init, time_sec_s, time_sec_e, ncpu=12)
     exit()

@@ -4,7 +4,8 @@ import glob
 import h5py
 
 class ANIM_INIT:
-    def __init__(self, date, local_dir='/argus/home/chen/work/01_anim/new'):
+
+    def __init__(self, date, local_dir='/argus/home/chen/work/01_anim/new/data'):
 
         self.date   = date
         self.date_s = date.strftime('%Y-%m-%d')
@@ -92,7 +93,6 @@ def MAIN_TEST(init, dtime_s, dtime_e):
             print(index, time_stamp0)
             print(N_forward, N_nadir, N_track, N_ssfr)
             print('-'*66)
-
 
 def MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p'):
     #{{{
