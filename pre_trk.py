@@ -136,6 +136,13 @@ class PLT_TRK_MAP:
             height0 = 800000.0
             meridians = np.arange(-180, 181, 4)
             parallels = np.arange(-90 , 91 , 1)
+        elif init.date_s == '2014-09-11':
+            lon0 = -134.0
+            lat0 = 72.8
+            width0  = 500000.0
+            height0 = 500000.0
+            meridians = np.arange(-180, 181, 4)
+            parallels = np.arange(-90 , 91 , 1)
         elif init.date_s == '2014-09-13':
             lon0 = -134.0
             lat0 = 72.8
@@ -349,7 +356,7 @@ if __name__ == '__main__':
     # date = datetime.datetime(2014, 9, 9)  # done
     # date = datetime.datetime(2014, 9, 10) # done
     # date = datetime.datetime(2014, 9, 11) # doing
-    # date = datetime.datetime(2014, 9, 13) # doing
+    date = datetime.datetime(2014, 9, 13) # doing
     # date = datetime.datetime(2014, 9, 16) # done
     # date = datetime.datetime(2014, 9, 17) # done
     # date = datetime.datetime(2014, 9, 19) # done
@@ -374,8 +381,8 @@ if __name__ == '__main__':
     # exit()
 
     # step 1.e: find a good map center and map range and location for the altitude plot
-    # plt  = PLT_TRK_MAP([init, 19.8333*3600.0, 23.99*3600.0], Nloc_inset=4, testMode=True)
-    # exit()
+    plt  = PLT_TRK_MAP([init, 19.8333*3600.0, 23.99*3600.0], Nloc_inset=4, testMode=True)
+    exit()
     # =============================================
 
     #  time_sec_s = (19.0+35.0/60.0)*3600.0
