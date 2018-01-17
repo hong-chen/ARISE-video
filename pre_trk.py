@@ -336,7 +336,7 @@ def TEST_TRK_MAP(init, plt_trk=False):
 if __name__ == '__main__':
 
     import matplotlib as mpl
-    mpl.use('Agg')
+    # mpl.use('Agg')
     import matplotlib.pyplot as plt
     from mpl_toolkits.basemap import Basemap
     from matplotlib import rcParams
@@ -344,18 +344,19 @@ if __name__ == '__main__':
     from mpl_toolkits.axes_grid1.inset_locator import inset_axes
     from pre_vid import ANIM_INIT
 
-    #  date = datetime.datetime(2014, 9, 4)  # done
-    #  date = datetime.datetime(2014, 9, 7)  # done
-    #  date = datetime.datetime(2014, 9, 9)  # done
-    #  date = datetime.datetime(2014, 9, 10)  # doing
-    date = datetime.datetime(2014, 9, 13)  # doing
-    #  date = datetime.datetime(2014, 9, 16) # done
-    #  date = datetime.datetime(2014, 9, 17) # done
-    #  date = datetime.datetime(2014, 9, 19) # done
-    #  date = datetime.datetime(2014, 9, 21) # doing
-    #  date = datetime.datetime(2014, 9, 24) # doing
-    #  date = datetime.datetime(2014, 10, 2) # doing
-    #  date = datetime.datetime(2014, 10, 4) # doing
+    # date = datetime.datetime(2014, 9, 4)  # done
+    # date = datetime.datetime(2014, 9, 7)  # done
+    # date = datetime.datetime(2014, 9, 9)  # done
+    # date = datetime.datetime(2014, 9, 10) # done
+    # date = datetime.datetime(2014, 9, 11) # doing
+    # date = datetime.datetime(2014, 9, 13) # doing
+    # date = datetime.datetime(2014, 9, 16) # done
+    # date = datetime.datetime(2014, 9, 17) # done
+    # date = datetime.datetime(2014, 9, 19) # done
+    # date = datetime.datetime(2014, 9, 21) # doing
+    # date = datetime.datetime(2014, 9, 24) # doing
+    # date = datetime.datetime(2014, 10, 2) # doing
+    # date = datetime.datetime(2014, 10, 4) # doing
 
     init = ANIM_INIT(date)
 
