@@ -72,14 +72,13 @@ def GDATA_MAP_TIFF(fname):
     return lon, lat, rgb
 
 def CDATA_MAP_H5(fname_tiff, fname_h5):
-    #{{{
+
     lon, lat, rgb = GDATA_MAP_TIFF(fname_tiff)
     f = h5py.File(fname_h5, 'w')
     f['lon'] = lon
     f['lat'] = lat
     f['rgb'] = rgb
     f.close()
-    #}}}
 
 def GDATA_TRK(fname, skip_header=66):
 
@@ -95,14 +94,12 @@ def GDATA_TRK(fname, skip_header=66):
     lat[logic] = np.nan
     return time_sec, lon, lat, alt
 
-
 def TIME_STAMP_TRK(delta_second, dtime0=datetime.datetime(2014, 9, 19, 0, 0, 0)):
-    #{{{
+
     time  = dtime0 + datetime.timedelta(seconds=delta_second)
     time_stamp = time.strftime('%Y-%m-%d-%H-%M-%S')
 
     return time_stamp
-    #}}}
 
 class PLT_TRK_MAP:
 
@@ -296,7 +293,6 @@ class PLT_TRK_MAP:
 
 def MAIN_TRK_MAP(init, time_sec_s, time_sec_e, ncpu=8):
 
-
     time_sec = np.arange(time_sec_s, time_sec_e+2)
     N           = time_sec.size // ncpu
     time_sec_s0 = np.array([])
@@ -318,7 +314,6 @@ def MAIN_TRK_MAP(init, time_sec_s, time_sec_e, ncpu=8):
     pool.outputs = pool.map(PLT_TRK_MAP, mp_statements)
     pool.close()
     pool.join()
-    #}}}
 
 def TEST_TRK_MAP(init, plt_trk=False):
 
