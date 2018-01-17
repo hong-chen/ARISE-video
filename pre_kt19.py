@@ -22,7 +22,7 @@ def PLT_KT19(statements, testMode=True):
 
     index0 = np.argmin(np.abs(time_sec-time_sec0))
     if abs(time_sec[index0]-time_sec0)>0.1:
-        print 'Error [PLT_KT19]: %s is not avaiable.' % dtime0_s
+        print('Error [PLT_KT19]: %s is not avaiable.' % dtime0_s)
         return
 
     logic = (time_sec >= time_sec0-1800.0) & (time_sec <= time_sec0+1800.0)

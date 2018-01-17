@@ -15,7 +15,7 @@ def GDATA_SSFR(fname, varnames):
         try:
             datasets.append(f[varname][...])
         except KeyError:
-            print 'Error: Wrong variable name! (GDATA_SSFR in pre_ssfr.py)'
+            print('Error: Wrong variable name! (GDATA_SSFR in pre_ssfr.py)')
             #print '-'*50
             exit()
     #print 'Reading complete!'
@@ -61,4 +61,4 @@ def GDATA_SSFR_SPEC(fname, time_sec0):
     #}}}
 
 if __name__ == '__main__':
-    print 'I am pre_ssfr.py.'
+    print('I am pre_ssfr.py.')

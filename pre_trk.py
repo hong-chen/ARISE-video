@@ -343,7 +343,7 @@ def TEST_TRK_MAP(init, plt_trk=False):
 if __name__ == '__main__':
 
     import matplotlib as mpl
-    # mpl.use('Agg')
+    mpl.use('Agg')
     import matplotlib.pyplot as plt
     from mpl_toolkits.basemap import Basemap
     from matplotlib import rcParams
@@ -355,8 +355,8 @@ if __name__ == '__main__':
     # date = datetime.datetime(2014, 9, 7)  # done
     # date = datetime.datetime(2014, 9, 9)  # done
     # date = datetime.datetime(2014, 9, 10) # done
-    # date = datetime.datetime(2014, 9, 11) # doing
-    date = datetime.datetime(2014, 9, 13) # doing
+    date = datetime.datetime(2014, 9, 11) # doing
+    # date = datetime.datetime(2014, 9, 13) # doing
     # date = datetime.datetime(2014, 9, 16) # done
     # date = datetime.datetime(2014, 9, 17) # done
     # date = datetime.datetime(2014, 9, 19) # done
@@ -381,8 +381,8 @@ if __name__ == '__main__':
     # exit()
 
     # step 1.e: find a good map center and map range and location for the altitude plot
-    plt  = PLT_TRK_MAP([init, 19.8333*3600.0, 23.99*3600.0], Nloc_inset=4, testMode=True)
-    exit()
+    # plt  = PLT_TRK_MAP([init, 19.8333*3600.0, 23.99*3600.0], Nloc_inset=4, testMode=True)
+    # exit()
     # =============================================
 
     #  time_sec_s = (19.0+35.0/60.0)*3600.0
@@ -399,7 +399,7 @@ if __name__ == '__main__':
     #  time_sec_e = (23.0+10.0/60.0)*3600.0
     #  time_sec_s = (21.0+10.0/60.0)*3600.0
     #  time_sec_e = (24.0+50.0/60.0)*3600.0
-    time_sec_s = (19.5)*3600.0
+    time_sec_s = (20.5)*3600.0
     time_sec_e = (23.0)*3600.0
 
     MAIN_TRK_MAP(init, time_sec_s, time_sec_e, ncpu=12)
