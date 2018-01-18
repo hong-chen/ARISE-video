@@ -1626,7 +1626,6 @@ if __name__ == '__main__':
     time_sec_s = (19.0 + 30.0/60.0)*3600.0
     time_sec_e = (23.0 + 0.0/60.0)*3600.0
     MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=14)
-    exit()
 
     # --- 2014-09-21 ---
     #  date = datetime.datetime(2014, 9, 21)
@@ -1643,11 +1642,12 @@ if __name__ == '__main__':
     #  MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12)
 
     # --- 2014-10-02 ---
-    # date = datetime.datetime(2014, 10, 2)
-    # init = ANIM_INIT(date)
-    # time_sec_s = (24.0)*3600.0
-    # time_sec_e = (28.0)*3600.0
-    # MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12)
+    date = datetime.datetime(2014, 10, 2)
+    init = ANIM_INIT(date)
+    time_sec_s = (24.0)*3600.0
+    time_sec_e = (28.0)*3600.0
+    MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12)
+    exit()
 
     # ============= one frame test ===============
     # date = datetime.datetime(2014, 9, 13)
