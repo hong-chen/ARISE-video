@@ -3,6 +3,7 @@ import glob
 import os
 import numpy as np
 from scipy.io import readsav
+from PIL import Image
 from pre_trk import GDATA_TRK
 from pre_kt19 import GDATA_KT19
 from pre_ssfr import GDATA_SSFR_NAT, GDATA_SSFR_SPEC
@@ -15,7 +16,7 @@ def PLT_JOIN(statements, testMode=False):
     dtime0_s  = dtime0.strftime('%Y-%m-%d_%H:%M:%S')
 
     rcParams['font.size'] = 12
-    fig = plt.figure(figsize=(11, 3.5))
+    fig = plt.figure(figsize=(10, 4))
     gs  = gridspec.GridSpec(5, 9)
     ax1 = plt.subplot(gs[1:5, 0:3])
     ax2 = plt.subplot(gs[1:5, 3:6])
@@ -150,14 +151,18 @@ def PLT_JOIN(statements, testMode=False):
 
         fig.text(0.5, 0.84, '(%.4fh, %7.2f$^\circ$, %5.2f$^\circ$, %4dm)' % (time_sec0/3600.0, lon_trk0, lat_trk0, alt_trk0), fontsize=16, ha='center')
 
-    fname_graph = '%s/join_%s.png' % (init.fdir_join_graph, dtime0_s)
     if testMode:
-        plt.savefig('test.png', bbox_inches=None)
-        plt.show()
-        exit()
-    plt.savefig(fname_graph, bbox_inches=None)
-    print('%s is complete.' % fname_graph)
-    plt.close(fig)
+        fname_graph = 'join_%s.png' % (dtime0_s)
+        plt.savefig(fname_graph, bbox_inches=None, pad_inches=None)
+        plt.close(fig)
+
+        img = Image.open(fname_graph)
+        print(img.size)
+    else:
+        fname_graph = '%s/join_%s.png' % (init.fdir_join_graph, dtime0_s)
+        plt.savefig(fname_graph, bbox_inches=None, pad_inches=None)
+        print('%s is complete.' % fname_graph)
+        plt.close(fig)
 
 def PLT_JOIN_BACKUP(statements, testMode=False):
 
@@ -1584,7 +1589,7 @@ def PLT_JOIN_V1(statements, testMode=False):
     plt.close(fig)
 
 def MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12):
-    #{{{
+
     import multiprocessing as mp
     time_sec = np.arange(time_sec_s, time_sec_e+1)
     inits = [init]*time_sec.size
@@ -1593,7 +1598,7 @@ def MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12):
     pool.outputs = pool.map(PLT_JOIN, zip(inits, time_sec))
     pool.close()
     pool.join()
-    #}}}
+
 
 if __name__ == '__main__':
     import matplotlib as mpl
@@ -1613,6 +1618,13 @@ if __name__ == '__main__':
     #  time_sec_e = (23.0+55.0/60.0)*3600.0
     #  MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12)
 
+    # --- 2014-10-02 ---
+    date = datetime.datetime(2014, 10, 2)
+    init = ANIM_INIT(date)
+    time_sec_s = (25.0)*3600.0
+    time_sec_e = (25.6)*3600.0
+    MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12)
+
     # --- 2014-09-11 ---
     date = datetime.datetime(2014, 9, 11)
     init = ANIM_INIT(date)
@@ -1626,6 +1638,7 @@ if __name__ == '__main__':
     time_sec_s = (19.0 + 30.0/60.0)*3600.0
     time_sec_e = (23.0 + 0.0/60.0)*3600.0
     MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=14)
+    exit()
 
     # --- 2014-09-21 ---
     #  date = datetime.datetime(2014, 9, 21)
@@ -1641,17 +1654,11 @@ if __name__ == '__main__':
     #  time_sec_e = (24.0+50.0/60.0)*3600.0
     #  MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12)
 
-    # --- 2014-10-02 ---
-    date = datetime.datetime(2014, 10, 2)
-    init = ANIM_INIT(date)
-    time_sec_s = (24.0)*3600.0
-    time_sec_e = (28.0)*3600.0
-    MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12)
-    exit()
 
     # ============= one frame test ===============
-    # date = datetime.datetime(2014, 9, 13)
+    # date = datetime.datetime(2014, 9, 11)
     # init = ANIM_INIT(date)
-    # PLT_JOIN([init, 22.5*3600.0], testMode=True)
+    # PLT_JOIN([init, 20.7269*3600.0], testMode=True)
+    # PLT_JOIN([init, 20.7372*3600.0], testMode=True)
     # exit()
     # ============================================
