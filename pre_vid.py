@@ -120,7 +120,6 @@ def MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p'):
     #}}}
 
 if __name__ == '__main__':
-    pass
 
     #date = datetime.datetime(2014, 9, 4)
     #date = datetime.datetime(2014, 9, 7)
@@ -163,6 +162,13 @@ if __name__ == '__main__':
     # dtime_s = datetime.datetime(2014, 9, 11, 20, 30, 0)
     # dtime_e = datetime.datetime(2014, 9, 11, 23, 0, 0)
     # MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
+
+    # --- 2014-09-13 ---
+    date = datetime.datetime(2014, 9, 13)
+    init = ANIM_INIT(date)
+    dtime_s = datetime.datetime(2014, 9, 13, 19, 30, 0)
+    dtime_e = datetime.datetime(2014, 9, 13, 23, 0, 0)
+    MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
 
     #+++++++++++++++++++ test ++++++++++++++++++
     #MAIN_TEST(init, dtime_s, dtime_e)
