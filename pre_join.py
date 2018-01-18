@@ -15,7 +15,7 @@ def PLT_JOIN(statements, testMode=False):
     dtime0_s  = dtime0.strftime('%Y-%m-%d_%H:%M:%S')
 
     rcParams['font.size'] = 12
-    fig = plt.figure(figsize=(12, 3.5))
+    fig = plt.figure(figsize=(11, 3.5))
     gs  = gridspec.GridSpec(5, 9)
     ax1 = plt.subplot(gs[1:5, 0:3])
     ax2 = plt.subplot(gs[1:5, 3:6])
@@ -150,11 +150,12 @@ def PLT_JOIN(statements, testMode=False):
 
         fig.text(0.5, 0.84, '(%.4fh, %7.2f$^\circ$, %5.2f$^\circ$, %4dm)' % (time_sec0/3600.0, lon_trk0, lat_trk0, alt_trk0), fontsize=16, ha='center')
 
+    fname_graph = '%s/join_%s.png' % (init.fdir_join_graph, dtime0_s)
     if testMode:
+        plt.savefig('test.png', bbox_inches=None)
         plt.show()
         exit()
-    fname_graph = '%s/join_%s.png' % (init.fdir_join_graph, dtime0_s)
-    plt.savefig(fname_graph)
+    plt.savefig(fname_graph, bbox_inches=None)
     print('%s is complete.' % fname_graph)
     plt.close(fig)
 
@@ -1618,15 +1619,14 @@ if __name__ == '__main__':
     time_sec_s = (20.0 + 30.0/60.0)*3600.0
     time_sec_e = (23.0 + 0.0/60.0)*3600.0
     MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=14)
-    exit()
 
     # --- 2014-09-13 ---
-    # date = datetime.datetime(2014, 9, 13)
-    # init = ANIM_INIT(date)
-    # time_sec_s = (19.0 + 30.0/60.0)*3600.0
-    # time_sec_e = (23.0 + 0.0/60.0)*3600.0
-    # MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=14)
-    # exit()
+    date = datetime.datetime(2014, 9, 13)
+    init = ANIM_INIT(date)
+    time_sec_s = (19.0 + 30.0/60.0)*3600.0
+    time_sec_e = (23.0 + 0.0/60.0)*3600.0
+    MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=14)
+    exit()
 
     # --- 2014-09-21 ---
     #  date = datetime.datetime(2014, 9, 21)
