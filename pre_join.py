@@ -16,7 +16,7 @@ def PLT_JOIN(statements, testMode=False):
     dtime0_s  = dtime0.strftime('%Y-%m-%d_%H:%M:%S')
 
     rcParams['font.size'] = 12
-    fig = plt.figure(figsize=(10, 4))
+    fig = plt.figure(figsize=(11, 4))
     gs  = gridspec.GridSpec(5, 9)
     ax1 = plt.subplot(gs[1:5, 0:3])
     ax2 = plt.subplot(gs[1:5, 3:6])
@@ -1624,6 +1624,7 @@ if __name__ == '__main__':
     time_sec_s = (25.0)*3600.0
     time_sec_e = (25.6)*3600.0
     MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12)
+    exit()
 
     # --- 2014-09-11 ---
     date = datetime.datetime(2014, 9, 11)

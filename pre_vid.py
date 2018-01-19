@@ -98,8 +98,8 @@ def MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p', frame_rate=30):
 
     time_stamp_s = dtime_s.strftime('%Y-%m-%d_%H:%M:%S')
     time_stamp_e = dtime_e.strftime('%Y-%m-%d_%H:%M:%S')
-    os.system("ffmpeg -loglevel quiet -y -framerate %d -pattern_type glob -i '%s/*.png' -vf scale=1920:1080 -c:v libx264 -pix_fmt %s %s_%s.mp4" % (frame_rate, init.fdir_join_graph, format_str, time_stamp_s, time_stamp_e))
-    exit()
+    # os.system("ffmpeg -loglevel quiet -y -framerate %d -pattern_type glob -i '%s/*.png' -vf scale=1920:1080 -c:v libx264 -pix_fmt %s %s_%s.mp4" % (frame_rate, init.fdir_join_graph, format_str, time_stamp_s, time_stamp_e))
+    # exit()
 
     N = len(glob.glob('%s/*.png' % init.fdir_vid_graph))
     if N > 0:
@@ -116,7 +116,7 @@ def MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p', frame_rate=30):
     N00 = len(glob.glob('%s/*.png' % init.fdir_vid_graph))
     if N0 == N00:
         #os.system("ffmpeg -loglevel quiet -framerate 30 -pattern_type glob -i '%s/*.png' -c:v libx264 -pix_fmt %s %s_%s.mp4" % (init.fdir_vid_graph, format_str, time_stamp_s, time_stamp_e))
-        os.system("ffmpeg -loglevel quiet -y -framerate 30 -pattern_type glob -i '%s/*.png' -vf scale=1920:1080 -c:v libx264 -pix_fmt %s %s_%s.mp4" % (init.fdir_vid_graph, format_str, time_stamp_s, time_stamp_e))
+        os.system("ffmpeg -loglevel quiet -y -framerate %d -pattern_type glob -i '%s/*.png' -vf scale=1920:1080 -c:v libx264 -pix_fmt %s %s_%s.mp4" % (frame_rate, init.fdir_vid_graph, format_str, time_stamp_s, time_stamp_e))
 
 
 if __name__ == '__main__':
@@ -154,7 +154,7 @@ if __name__ == '__main__':
     init = ANIM_INIT(date)
     dtime_s = datetime.datetime(2014, 10, 3, 1, 0, 0)
     dtime_e = datetime.datetime(2014, 10, 3, 1, 33, 36)
-    MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p', frame_rate=60)
+    MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p', frame_rate=120)
     exit()
 
     # --- 2014-09-11 ---

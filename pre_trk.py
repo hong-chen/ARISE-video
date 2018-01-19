@@ -186,12 +186,12 @@ class PLT_TRK_MAP:
             meridians = np.arange(-180, 181, 4)
             parallels = np.arange(-90, 91, 2)
         elif init.date_s == '2014-10-02':
-            lon0 = -159.0
-            lat0 = 58.8
-            width0  = 660000.0
-            height0 = 660000.0
-            meridians = np.arange(-180, 181, 4)
-            parallels = np.arange(-90, 91, 2)
+            lon0 = -160.0
+            lat0 = 57.5
+            width0  = 300000.0
+            height0 = 300000.0
+            meridians = np.arange(-180, 181, 1)
+            parallels = np.arange(-90, 91, 0.5)
             Nloc_inset=2
 
         #++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -229,7 +229,7 @@ class PLT_TRK_MAP:
         rgb_map = rgb_map[logic, :]
 
         x, y = self.m(lon_map, lat_map)
-        self.m.scatter(x, y, c=rgb_map, s=1.0, edgecolor='none')
+        self.m.scatter(x, y, c=rgb_map, s=3.0, edgecolor='none')
         x, y = self.m(self.lon_trk, self.lat_trk)
         self.m.scatter(x[::10], y[::10], c='red', s=3, alpha=0.05)
 
@@ -355,14 +355,14 @@ if __name__ == '__main__':
     # date = datetime.datetime(2014, 9, 7)  # done
     # date = datetime.datetime(2014, 9, 9)  # done
     # date = datetime.datetime(2014, 9, 10) # done
-    date = datetime.datetime(2014, 9, 11) # doing
+    # date = datetime.datetime(2014, 9, 11) # doing
     # date = datetime.datetime(2014, 9, 13) # doing
     # date = datetime.datetime(2014, 9, 16) # done
     # date = datetime.datetime(2014, 9, 17) # done
     # date = datetime.datetime(2014, 9, 19) # done
     # date = datetime.datetime(2014, 9, 21) # doing
     # date = datetime.datetime(2014, 9, 24) # doing
-    # date = datetime.datetime(2014, 10, 2) # doing
+    date = datetime.datetime(2014, 10, 2) # doing
     # date = datetime.datetime(2014, 10, 4) # doing
 
     init = ANIM_INIT(date)
@@ -381,7 +381,7 @@ if __name__ == '__main__':
     # exit()
 
     # step 1.e: find a good map center and map range and location for the altitude plot
-    # plt  = PLT_TRK_MAP([init, 19.8333*3600.0, 23.99*3600.0], Nloc_inset=4, testMode=True)
+    # plt  = PLT_TRK_MAP([init, 25.8333*3600.0, 28.99*3600.0], Nloc_inset=4, testMode=True)
     # exit()
     # =============================================
 
@@ -399,8 +399,8 @@ if __name__ == '__main__':
     #  time_sec_e = (23.0+10.0/60.0)*3600.0
     #  time_sec_s = (21.0+10.0/60.0)*3600.0
     #  time_sec_e = (24.0+50.0/60.0)*3600.0
-    time_sec_s = (20.5)*3600.0
-    time_sec_e = (23.0)*3600.0
+    time_sec_s = (24.95)*3600.0
+    time_sec_e = (25.65)*3600.0
 
     MAIN_TRK_MAP(init, time_sec_s, time_sec_e, ncpu=12)
     exit()
