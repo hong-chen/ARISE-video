@@ -151,9 +151,12 @@ def PLT_JOIN(statements, testMode=False):
 
         fig.text(0.5, 0.84, '(%.4fh, %7.2f$^\circ$, %5.2f$^\circ$, %4dm)' % (time_sec0/3600.0, lon_trk0, lat_trk0, alt_trk0), fontsize=16, ha='center')
 
+    gs.update(wspace=0.8, hspace=0.2)
+
     if testMode:
         fname_graph = 'join_%s.png' % (dtime0_s)
         plt.savefig(fname_graph, bbox_inches=None, pad_inches=None)
+        plt.show()
         plt.close(fig)
 
         img = Image.open(fname_graph)
@@ -1627,19 +1630,19 @@ if __name__ == '__main__':
     exit()
 
     # --- 2014-09-11 ---
-    date = datetime.datetime(2014, 9, 11)
-    init = ANIM_INIT(date)
-    time_sec_s = (20.0 + 30.0/60.0)*3600.0
-    time_sec_e = (23.0 + 0.0/60.0)*3600.0
-    MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=14)
+    # date = datetime.datetime(2014, 9, 11)
+    # init = ANIM_INIT(date)
+    # time_sec_s = (20.0 + 30.0/60.0)*3600.0
+    # time_sec_e = (23.0 + 0.0/60.0)*3600.0
+    # MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=14)
 
     # --- 2014-09-13 ---
-    date = datetime.datetime(2014, 9, 13)
-    init = ANIM_INIT(date)
-    time_sec_s = (19.0 + 30.0/60.0)*3600.0
-    time_sec_e = (23.0 + 0.0/60.0)*3600.0
-    MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=14)
-    exit()
+    # date = datetime.datetime(2014, 9, 13)
+    # init = ANIM_INIT(date)
+    # time_sec_s = (19.0 + 30.0/60.0)*3600.0
+    # time_sec_e = (23.0 + 0.0/60.0)*3600.0
+    # MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=14)
+    # exit()
 
     # --- 2014-09-21 ---
     #  date = datetime.datetime(2014, 9, 21)
@@ -1657,9 +1660,8 @@ if __name__ == '__main__':
 
 
     # ============= one frame test ===============
-    # date = datetime.datetime(2014, 9, 11)
+    # date = datetime.datetime(2014, 10, 2)
     # init = ANIM_INIT(date)
-    # PLT_JOIN([init, 20.7269*3600.0], testMode=True)
-    # PLT_JOIN([init, 20.7372*3600.0], testMode=True)
+    # PLT_JOIN([init, 25.3372*3600.0], testMode=True)
     # exit()
     # ============================================

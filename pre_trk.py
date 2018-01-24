@@ -291,7 +291,7 @@ class PLT_TRK_MAP:
         dtime0   = init.date+datetime.timedelta(seconds=self.time_sec0)
         dtime0_s = dtime0.strftime('%Y-%m-%d_%H:%M:%S')
         fname = '%s/trk_map_%s.png' % (init.fdir_trk_graph, dtime0_s)
-        plt.savefig(fname)
+        plt.savefig(fname, bbox_inches='tight')
         print('%s is complete.' % fname)
         self.fig.axes[-1].remove()
         self.fig.axes[-1].remove()
