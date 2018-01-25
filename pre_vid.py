@@ -158,19 +158,24 @@ if __name__ == '__main__':
     # exit()
 
     # --- 2014-09-11 ---
-    date = datetime.datetime(2014, 9, 11)
-    init = ANIM_INIT(date)
-    dtime_s = datetime.datetime(2014, 9, 11, 20, 30, 0)
-    dtime_e = datetime.datetime(2014, 9, 11, 23, 0, 0)
-    MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
-    exit()
+    # date = datetime.datetime(2014, 9, 11)
+    # init = ANIM_INIT(date)
+    # # dtime_s = datetime.datetime(2014, 9, 11, 20, 30, 0)
+    # # dtime_e = datetime.datetime(2014, 9, 11, 23, 0, 0)
+    # dtime_s = datetime.datetime(2014, 9, 11, 21, 12, 0)
+    # dtime_e = datetime.datetime(2014, 9, 11, 21, 54, 0)
+    # MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
+    # exit()
 
     # --- 2014-09-13 ---
-    # date = datetime.datetime(2014, 9, 13)
-    # init = ANIM_INIT(date)
+    date = datetime.datetime(2014, 9, 13)
+    init = ANIM_INIT(date)
     # dtime_s = datetime.datetime(2014, 9, 13, 19, 30, 0)
     # dtime_e = datetime.datetime(2014, 9, 13, 23, 0, 0)
-    # MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
+    dtime_s = datetime.datetime(2014, 9, 13, 20, 24, 0)
+    dtime_e = datetime.datetime(2014, 9, 13, 20, 36, 0)
+    MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
+    exit()
 
     #+++++++++++++++++++ test ++++++++++++++++++
     #MAIN_TEST(init, dtime_s, dtime_e)

@@ -1660,7 +1660,7 @@ if __name__ == '__main__':
 
 
     # ============= one frame test ===============
-    date = datetime.datetime(2014, 9, 11)
+    date = datetime.datetime(2014, 9, 13)
     init = ANIM_INIT(date)
     PLT_JOIN([init, 22.3372*3600.0], testMode=True)
     exit()
