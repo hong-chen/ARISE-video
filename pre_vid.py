@@ -42,6 +42,7 @@ class ANIM_INIT:
             self.fname_kt19      = '%s/temp.txt' % self.fdir_kt19_data
             self.fname_trk       = '%s/trk.hsk'  % self.fdir_trk_data
             self.fname_map       = '%s/map.h5'   % self.fdir_trk_data
+            self.fname_mod       = '%s/modis.h5'   % self.fdir_trk_data
             self.fname_map_tiff  = '%s/map.tiff'   % self.fdir_trk_data
         else:
             print('Message [ANIM_INIT]: creating directories...')
@@ -116,7 +117,8 @@ def MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p', frame_rate=30):
     N00 = len(glob.glob('%s/*.png' % init.fdir_vid_graph))
     if N0 == N00:
         #os.system("ffmpeg -loglevel quiet -framerate 30 -pattern_type glob -i '%s/*.png' -c:v libx264 -pix_fmt %s %s_%s.mp4" % (init.fdir_vid_graph, format_str, time_stamp_s, time_stamp_e))
-        os.system("ffmpeg -loglevel quiet -y -framerate %d -pattern_type glob -i '%s/*.png' -vf scale=1920:1080 -c:v libx264 -pix_fmt %s %s_%s.mp4" % (frame_rate, init.fdir_vid_graph, format_str, time_stamp_s, time_stamp_e))
+        os.system("ffmpeg -loglevel quiet -y -framerate %d -pattern_type glob -i '%s/*.png' -vf scale=2400:1100 -c:v libx264 -pix_fmt %s %s_%s.mp4" % (frame_rate, init.fdir_vid_graph, format_str, time_stamp_s, time_stamp_e))
+        # os.system("ffmpeg -loglevel quiet -y -framerate %d -pattern_type glob -i '%s/*.png' -c:v libx264 -pix_fmt %s %s_%s.mp4" % (frame_rate, init.fdir_vid_graph, format_str, time_stamp_s, time_stamp_e))
 
 
 if __name__ == '__main__':
@@ -162,8 +164,8 @@ if __name__ == '__main__':
     # init = ANIM_INIT(date)
     # # dtime_s = datetime.datetime(2014, 9, 11, 20, 30, 0)
     # # dtime_e = datetime.datetime(2014, 9, 11, 23, 0, 0)
-    # dtime_s = datetime.datetime(2014, 9, 11, 21, 12, 0)
-    # dtime_e = datetime.datetime(2014, 9, 11, 21, 54, 0)
+    # dtime_s = datetime.datetime(2014, 9, 11, 21, 10, 0)
+    # dtime_e = datetime.datetime(2014, 9, 11, 21, 19, 0)
     # MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
     # exit()
 
@@ -172,7 +174,7 @@ if __name__ == '__main__':
     init = ANIM_INIT(date)
     # dtime_s = datetime.datetime(2014, 9, 13, 19, 30, 0)
     # dtime_e = datetime.datetime(2014, 9, 13, 23, 0, 0)
-    dtime_s = datetime.datetime(2014, 9, 13, 20, 24, 0)
+    dtime_s = datetime.datetime(2014, 9, 13, 20, 28, 0)
     dtime_e = datetime.datetime(2014, 9, 13, 20, 36, 0)
     MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
     exit()
