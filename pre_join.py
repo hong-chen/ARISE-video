@@ -1722,13 +1722,14 @@ if __name__ == '__main__':
     # exit()
 
     # --- 2014-09-11 ---
-    date = datetime.datetime(2014, 9, 11)
-    init = ANIM_INIT(date)
-    # time_sec_s = (20.0 + 30.0/60.0)*3600.0
-    # time_sec_e = (23.0 + 0.0/60.0)*3600.0
-    time_sec_s = (21.166)*3600.0
-    time_sec_e = (21.317)*3600.0
-    MAIN_JOIN_MOD(init, time_sec_s, time_sec_e, ncpu=14)
+    # date = datetime.datetime(2014, 9, 11)
+    # init = ANIM_INIT(date)
+    # # time_sec_s = (20.0 + 30.0/60.0)*3600.0
+    # # time_sec_e = (23.0 + 0.0/60.0)*3600.0
+    # time_sec_s = (21.166)*3600.0
+    # time_sec_e = (22.7403)*3600.0
+    # MAIN_JOIN_MOD(init, time_sec_s, time_sec_e, ncpu=14)
+    # exit()
 
     # --- 2014-09-13 ---
     # date = datetime.datetime(2014, 9, 13)
@@ -1737,6 +1738,14 @@ if __name__ == '__main__':
     # time_sec_e = (23.0 + 0.0/60.0)*3600.0
     # MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=14)
     # exit()
+
+    # --- 2014-09-17 ---
+    date = datetime.datetime(2014, 9, 17)
+    init = ANIM_INIT(date)
+    time_sec_s = (21.39)*3600.0
+    time_sec_e = (21.50)*3600.0
+    MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=14)
+    exit()
 
     # --- 2014-09-21 ---
     #  date = datetime.datetime(2014, 9, 21)
