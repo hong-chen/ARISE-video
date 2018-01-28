@@ -117,18 +117,46 @@ def MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p', frame_rate=30):
     N00 = len(glob.glob('%s/*.png' % init.fdir_vid_graph))
     if N0 == N00:
         #os.system("ffmpeg -loglevel quiet -framerate 30 -pattern_type glob -i '%s/*.png' -c:v libx264 -pix_fmt %s %s_%s.mp4" % (init.fdir_vid_graph, format_str, time_stamp_s, time_stamp_e))
-        os.system("ffmpeg -loglevel quiet -y -framerate %d -pattern_type glob -i '%s/*.png' -vf scale=2400:1100 -c:v libx264 -pix_fmt %s %s_%s.mp4" % (frame_rate, init.fdir_vid_graph, format_str, time_stamp_s, time_stamp_e))
+        os.system("ffmpeg -loglevel quiet -y -framerate %d -pattern_type glob -i '%s/*.png' -vf scale=1400:800 -c:v libx264 -pix_fmt %s %s_%s.mp4" % (frame_rate, init.fdir_vid_graph, format_str, time_stamp_s, time_stamp_e))
         # os.system("ffmpeg -loglevel quiet -y -framerate %d -pattern_type glob -i '%s/*.png' -c:v libx264 -pix_fmt %s %s_%s.mp4" % (frame_rate, init.fdir_vid_graph, format_str, time_stamp_s, time_stamp_e))
 
 
 if __name__ == '__main__':
 
-    #date = datetime.datetime(2014, 9, 4)
-    #date = datetime.datetime(2014, 9, 7)
-    #date = datetime.datetime(2014, 9, 9)
-    #date = datetime.datetime(2014, 9, 16)
-    #date = datetime.datetime(2014, 9, 17)
-    #date = datetime.datetime(2014, 9, 19)
+    # --- 2014-09-07 ---
+    # date = datetime.datetime(2014, 9, 7)
+    # init = ANIM_INIT(date)
+    # dtime_s = datetime.datetime(2014, 9, 7, 23, 24, 45)
+    # dtime_e = datetime.datetime(2014, 9, 7, 23, 31, 12)
+    # MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
+    # exit()
+
+    # --- 2014-09-09 ---
+    # date = datetime.datetime(2014, 9, 9)
+    # init = ANIM_INIT(date)
+    # dtime_s = datetime.datetime(2014, 9, 9, 23,  4, 37)
+    # dtime_e = datetime.datetime(2014, 9, 9, 23, 18,  2)
+    # MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
+    # exit()
+
+    # --- 2014-09-13 ---
+    date = datetime.datetime(2014, 9, 13)
+    init = ANIM_INIT(date)
+    dtime_s = datetime.datetime(2014, 9, 13, 20, 28, 52)
+    dtime_e = datetime.datetime(2014, 9, 13, 20, 36,  0)
+    MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
+    exit()
+
+    # --- 2014-09-19 ---
+    # date = datetime.datetime(2014, 9, 19)
+    # init = ANIM_INIT(date)
+    # dtime_s = datetime.datetime(2014, 9, 19, 21, 21, 30)
+    # dtime_e = datetime.datetime(2014, 9, 19, 21, 26,  5)
+    # MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
+    # exit()
+
+
+
 
     # --- 2014-09-10 ---
     #  date = datetime.datetime(2014, 9, 10)
@@ -180,14 +208,14 @@ if __name__ == '__main__':
     # exit()
 
     # --- 2014-09-17 ---
-    date = datetime.datetime(2014, 9, 17)
-    init = ANIM_INIT(date)
-    # dtime_s = datetime.datetime(2014, 9, 13, 19, 30, 0)
-    # dtime_e = datetime.datetime(2014, 9, 13, 23, 0, 0)
-    dtime_s = datetime.datetime(2014, 9, 17, 21, 23, 36)
-    dtime_e = datetime.datetime(2014, 9, 17, 21, 29, 37)
-    MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
-    exit()
+    # date = datetime.datetime(2014, 9, 17)
+    # init = ANIM_INIT(date)
+    # # dtime_s = datetime.datetime(2014, 9, 13, 19, 30, 0)
+    # # dtime_e = datetime.datetime(2014, 9, 13, 23, 0, 0)
+    # dtime_s = datetime.datetime(2014, 9, 17, 21, 23, 36)
+    # dtime_e = datetime.datetime(2014, 9, 17, 21, 29, 37)
+    # MAIN_VIDEO(init, dtime_s, dtime_e, format_str='yuv420p')
+    # exit()
 
 
     #+++++++++++++++++++ test ++++++++++++++++++

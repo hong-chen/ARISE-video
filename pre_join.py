@@ -10,86 +10,6 @@ from pre_kt19 import GDATA_KT19
 from pre_ssfr import GDATA_SSFR_NAT, GDATA_SSFR_SPEC
 
 
-def PLT_JOIN_MOD(statements, testMode=False):
-
-    init, time_sec0 = statements
-
-    dtime0    = init.date+datetime.timedelta(seconds=time_sec0)
-    dtime0_s  = dtime0.strftime('%Y-%m-%d_%H:%M:%S')
-
-    rcParams['font.size'] = 18
-    fig = plt.figure(figsize=(11, 5.5))
-    gs  = gridspec.GridSpec(8, 8)
-    ax1 = plt.subplot(gs[1:8, 0:4])
-    ax3 = plt.subplot(gs[1:8, 4:8])
-
-    # flight track
-    f = h5py.File(init.fname_mod, 'r')
-    extent = f['extent'][...]
-    map_rgb = f['map_mod'][...]
-    ctp_rgb = f['ctp_mod'][...]
-    lon_trk = f['lon_trk'][...]
-    lat_trk = f['lat_trk'][...]
-    cot_trk = f['cot_trk'][...]
-    tmhr_trk = f['tmhr_trk'][...]
-    f.close()
-    logic = (ctp_rgb[:, :, 0]==0.0)&(ctp_rgb[:, :, 1]==0.0)&(ctp_rgb[:, :, 2]==1.0)
-    ctp_rgb[logic, 2] = np.nan
-    ax1.imshow(map_rgb, origin='lower', extent=extent, aspect='auto', alpha=1.0, zorder=0)
-    ax1.imshow(ctp_rgb, origin='lower', extent=extent, aspect='auto', alpha=0.2, zorder=1)
-    logic = (tmhr_trk*3600.0<=time_sec0)
-    cmap = plt.cm.get_cmap("jet")
-    cmap.set_under("gray")
-    cs1 = ax1.scatter(lon_trk, lat_trk, c=cot_trk, cmap=cmap, vmin=0.0, vmax=24.0, zorder=2, s=5, alpha=0.6, lw=0.0)
-    cs1 = ax1.scatter(lon_trk[logic], lat_trk[logic], c=cot_trk[logic], cmap=cmap, vmin=0.0, vmax=24.0, zorder=3, lw=0.0)
-    ax1.yaxis.set_major_locator(FixedLocator(np.arange(0.0, 91.0, 0.5)))
-    ax1.xaxis.set_major_locator(FixedLocator(np.arange(0.0, 361.0, 1.0)))
-    ax1.set_title('Flight Track', fontsize=20)
-    ax1.set_xlabel('Longitude [$^\circ$]')
-    ax1.set_ylabel('Latitude [$^\circ$]')
-
-    # nadir camera
-    fnames_good = sorted(glob.glob('%s/*%s*_good.png' % (init.fdir_ncam_graph, dtime0_s)))
-    Ngood       = len(fnames_good)
-    fnames_bad  = sorted(glob.glob('%s/*%s*_bad.png' % (init.fdir_ncam_graph, dtime0_s)))
-    Nbad        = len(fnames_bad)
-
-    if Ngood > 0:
-        fname = fnames_good[0]
-        ax3.set_title('Nadir Camera', fontsize=20)
-    elif Nbad > 0:
-        fname = fnames_bad[0]
-        ax3.set_title('Nadir Camera', fontsize=20, color='dimgray')
-    else:
-        fname = None
-
-    if fname != None:
-        image_data  = mpimg.imread(fname)
-        if init.date_s == '2014-09-04':
-            ax3.imshow(image_data, origin='lower')
-        else:
-            ax3.imshow(image_data, aspect='auto')
-
-    ax3.axis('off')
-
-    fig.suptitle("%s UTC" % (dtime0.strftime('%Y-%m-%d %H:%M:%S')), fontsize=28, y=0.95)
-
-    gs.update(wspace=0.8, hspace=0.2)
-
-    if testMode:
-        fname_graph = 'join_%s.png' % (dtime0_s)
-        plt.savefig(fname_graph, bbox_inches=None, pad_inches=None)
-        plt.show()
-        plt.close(fig)
-
-        img = Image.open(fname_graph)
-        print(img.size)
-    else:
-        fname_graph = '%s/join_%s.png' % (init.fdir_join_graph, dtime0_s)
-        plt.savefig(fname_graph, bbox_inches=None, pad_inches=None)
-        print('%s is complete.' % fname_graph)
-        plt.close(fig)
-
 def PLT_JOIN(statements, testMode=False):
 
     init, time_sec0 = statements
@@ -1684,6 +1604,86 @@ def MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=12):
     pool.close()
     pool.join()
 
+def PLT_JOIN_MOD(statements, testMode=False):
+
+    init, time_sec0 = statements
+
+    dtime0    = init.date+datetime.timedelta(seconds=time_sec0)
+    dtime0_s  = dtime0.strftime('%Y-%m-%d_%H:%M:%S')
+
+    rcParams['font.size'] = 18
+    fig = plt.figure(figsize=(11, 5.5))
+    gs  = gridspec.GridSpec(8, 8)
+    ax1 = plt.subplot(gs[1:8, 0:4])
+    ax3 = plt.subplot(gs[1:8, 4:8])
+
+    # flight track
+    f = h5py.File(init.fname_mod, 'r')
+    extent = f['extent'][...]
+    map_rgb = f['map_mod'][...]
+    ctp_rgb = f['ctp_mod'][...]
+    lon_trk = f['lon_trk'][...]
+    lat_trk = f['lat_trk'][...]
+    cot_trk = f['cot_trk'][...]
+    tmhr_trk = f['tmhr_trk'][...]
+    f.close()
+    logic = (ctp_rgb[:, :, 0]==0.0)&(ctp_rgb[:, :, 1]==0.0)&(ctp_rgb[:, :, 2]==1.0)
+    ctp_rgb[logic, 2] = np.nan
+    ax1.imshow(map_rgb, origin='lower', extent=extent, aspect='auto', alpha=1.0, zorder=0)
+    ax1.imshow(ctp_rgb, origin='lower', extent=extent, aspect='auto', alpha=0.2, zorder=1)
+    logic = (tmhr_trk*3600.0<=time_sec0)
+    cmap = plt.cm.get_cmap("jet")
+    cmap.set_under("gray")
+    cs1 = ax1.scatter(lon_trk, lat_trk, c=cot_trk, cmap=cmap, vmin=0.0, vmax=24.0, zorder=2, s=5, alpha=0.6, lw=0.0)
+    cs1 = ax1.scatter(lon_trk[logic], lat_trk[logic], c=cot_trk[logic], cmap=cmap, vmin=0.0, vmax=24.0, zorder=3, lw=0.0)
+    ax1.yaxis.set_major_locator(FixedLocator(np.arange(0.0, 91.0, 0.5)))
+    ax1.xaxis.set_major_locator(FixedLocator(np.arange(0.0, 361.0, 1.0)))
+    ax1.set_title('Flight Track', fontsize=20)
+    ax1.set_xlabel('Longitude [$^\circ$]')
+    ax1.set_ylabel('Latitude [$^\circ$]')
+
+    # nadir camera
+    fnames_good = sorted(glob.glob('%s/*%s*_good.png' % (init.fdir_ncam_graph, dtime0_s)))
+    Ngood       = len(fnames_good)
+    fnames_bad  = sorted(glob.glob('%s/*%s*_bad.png' % (init.fdir_ncam_graph, dtime0_s)))
+    Nbad        = len(fnames_bad)
+
+    if Ngood > 0:
+        fname = fnames_good[0]
+        ax3.set_title('Nadir Camera', fontsize=20)
+    elif Nbad > 0:
+        fname = fnames_bad[0]
+        ax3.set_title('Nadir Camera', fontsize=20, color='dimgray')
+    else:
+        fname = None
+
+    if fname != None:
+        image_data  = mpimg.imread(fname)
+        if init.date_s == '2014-09-04':
+            ax3.imshow(image_data, origin='lower')
+        else:
+            ax3.imshow(image_data, aspect='auto')
+
+    ax3.axis('off')
+
+    fig.suptitle("%s UTC" % (dtime0.strftime('%Y-%m-%d %H:%M:%S')), fontsize=28, y=0.95)
+
+    gs.update(wspace=0.8, hspace=0.2)
+
+    if testMode:
+        fname_graph = 'join_%s.png' % (dtime0_s)
+        plt.savefig(fname_graph, bbox_inches=None, pad_inches=None)
+        plt.show()
+        plt.close(fig)
+
+        img = Image.open(fname_graph)
+        print(img.size)
+    else:
+        fname_graph = '%s/join_%s.png' % (init.fdir_join_graph, dtime0_s)
+        plt.savefig(fname_graph, bbox_inches=None, pad_inches=None)
+        print('%s is complete.' % fname_graph)
+        plt.close(fig)
+
 def MAIN_JOIN_MOD(init, time_sec_s, time_sec_e, ncpu=12):
 
     import multiprocessing as mp
@@ -1695,6 +1695,68 @@ def MAIN_JOIN_MOD(init, time_sec_s, time_sec_e, ncpu=12):
     pool.close()
     pool.join()
 
+def PLT_JOIN_FORWARD(statements, testMode=False):
+
+    init, time_sec0 = statements
+
+    dtime0    = init.date+datetime.timedelta(seconds=time_sec0)
+    dtime0_s  = dtime0.strftime('%Y-%m-%d_%H:%M:%S')
+
+    rcParams['font.size'] = 12
+    fig = plt.figure(figsize=(7, 4))
+    gs  = gridspec.GridSpec(5, 9)
+    ax2 = plt.subplot(gs[:, :])
+
+    # forward camera
+    fnames_good = sorted(glob.glob('%s/*%s*_good.png' % (init.fdir_fcam_graph, dtime0_s)))
+    Ngood       = len(fnames_good)
+    fnames_bad  = sorted(glob.glob('%s/*%s*_bad.png' % (init.fdir_fcam_graph, dtime0_s)))
+    Nbad        = len(fnames_bad)
+
+    if Ngood > 0:
+        fname = fnames_good[0]
+        # ax2.set_title('Forward Camera', fontsize=14)
+    elif Nbad > 0:
+        fname = fnames_bad[0]
+        # ax2.set_title('Forward Camera', fontsize=14, color='dimgray')
+    else:
+        fname = None
+
+    if fname != None:
+        image_data  = mpimg.imread(fname)
+        ax2.imshow(image_data)
+
+    ax2.axis('off')
+
+    fig.suptitle("%s UTC" % (dtime0.strftime('%Y-%m-%d %H:%M:%S')), fontsize=20, y=0.96)
+
+    if testMode:
+        fname_graph = 'join_%s.png' % (dtime0_s)
+        plt.savefig(fname_graph, bbox_inches=None, pad_inches=None)
+        # plt.show()
+        # exit()
+        plt.close(fig)
+
+        img = Image.open(fname_graph)
+        print(img.size)
+    else:
+        fname_graph = '%s/join_%s.png' % (init.fdir_join_graph, dtime0_s)
+        plt.savefig(fname_graph, bbox_inches=None, pad_inches=None)
+        print('%s is complete.' % fname_graph)
+        plt.close(fig)
+
+def MAIN_JOIN_FORWARD(init, time_sec_s, time_sec_e, ncpu=12):
+
+    import multiprocessing as mp
+    time_sec = np.arange(time_sec_s, time_sec_e+1)
+    inits = [init]*time_sec.size
+
+    pool = mp.Pool(processes=ncpu)
+    pool.outputs = pool.map(PLT_JOIN_FORWARD, zip(inits, time_sec))
+    pool.close()
+    pool.join()
+
+
 if __name__ == '__main__':
     import matplotlib as mpl
     mpl.use('Agg')
@@ -1705,6 +1767,40 @@ if __name__ == '__main__':
     import matplotlib.image as mpimg
     import matplotlib.patches as patches
     from pre_vid import ANIM_INIT
+
+    # --- 2014-09-07 ---
+    # date = datetime.datetime(2014, 9, 7)
+    # init = ANIM_INIT(date)
+    # time_sec_s = (23.40)*3600.0
+    # time_sec_e = (23.53)*3600.0
+    # MAIN_JOIN_FORWARD(init, time_sec_s, time_sec_e, ncpu=12)
+    # exit()
+
+    # --- 2014-09-09 ---
+    # date = datetime.datetime(2014, 9, 9)
+    # init = ANIM_INIT(date)
+    # time_sec_s = (23.07)*3600.0
+    # time_sec_e = (23.31)*3600.0
+    # MAIN_JOIN_FORWARD(init, time_sec_s, time_sec_e, ncpu=12)
+    # exit()
+
+    # --- 2014-09-13 ---
+    date = datetime.datetime(2014, 9, 13)
+    init = ANIM_INIT(date)
+    time_sec_s = (20.48)*3600.0
+    time_sec_e = (20.61)*3600.0
+    MAIN_JOIN_FORWARD(init, time_sec_s, time_sec_e, ncpu=12)
+    exit()
+
+
+    # --- 2014-09-19 ---
+    # date = datetime.datetime(2014, 9, 19)
+    # init = ANIM_INIT(date)
+    # time_sec_s = (21.35)*3600.0
+    # time_sec_e = (21.44)*3600.0
+    # MAIN_JOIN_FORWARD(init, time_sec_s, time_sec_e, ncpu=12)
+    # exit()
+
 
     # --- 2014-09-10 ---
     #  date = datetime.datetime(2014, 9, 10)
@@ -1740,12 +1836,12 @@ if __name__ == '__main__':
     # exit()
 
     # --- 2014-09-17 ---
-    date = datetime.datetime(2014, 9, 17)
-    init = ANIM_INIT(date)
-    time_sec_s = (21.39)*3600.0
-    time_sec_e = (21.50)*3600.0
-    MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=14)
-    exit()
+    # date = datetime.datetime(2014, 9, 17)
+    # init = ANIM_INIT(date)
+    # time_sec_s = (21.39)*3600.0
+    # time_sec_e = (21.50)*3600.0
+    # MAIN_JOIN(init, time_sec_s, time_sec_e, ncpu=14)
+    # exit()
 
     # --- 2014-09-21 ---
     #  date = datetime.datetime(2014, 9, 21)
@@ -1763,8 +1859,8 @@ if __name__ == '__main__':
 
 
     # ============= one frame test ===============
-    # date = datetime.datetime(2014, 9, 11)
-    # init = ANIM_INIT(date)
-    # PLT_JOIN_MOD([init, 21.3372*3600.0], testMode=True)
+    date = datetime.datetime(2014, 9, 7)
+    init = ANIM_INIT(date)
+    PLT_JOIN_FORWARD([init, 23.5*3600.0], testMode=True)
     # exit()
     # ============================================
