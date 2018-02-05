@@ -124,7 +124,7 @@ def MAIN_CAM(init, dtime_s, dtime_e, fdir_cam_data='/argus/field/arise/video'):
                 if tag == 'Nadir':
                     fdir_out     = init.fdir_ncam_graph
                     fdir_out_png = '%s/%s' % (fdir_out, filename_no_ext)
-                    cropRegion   = (134, 1926, 258, 1944)
+                    cropRegion   = (134, 1926, 258, 1942)
                 elif tag == 'Forward':
                     fdir_out     = init.fdir_fcam_graph
                     fdir_out_png = '%s/%s' % (fdir_out, filename_no_ext)
